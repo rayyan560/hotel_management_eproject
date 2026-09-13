@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxuryStay & Keto HMS | Developer Technical Guide (30 Slides)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(135deg, #0B132B 0%, #1C2541 50%, #0F172A 100%);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #E2E8F0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
+        .canva-header {
+            height: 60px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1.5px solid rgba(254, 161, 22, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            color: #F8FAFC;
+            z-index: 100;
+        }
+        .canva-header .left-section { display: flex; align-items: center; gap: 15px; }
+        .canva-logo {
+            display: flex; align-items: center; gap: 10px;
+            font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px;
+            color: #FEA116; background: rgba(254, 161, 22, 0.15);
+            padding: 6px 14px; border-radius: 30px; border: 1.5px solid rgba(254, 161, 22, 0.4);
+        }
+        .deck-title { font-size: 14.5px; font-weight: 600; color: #E2E8F0; border-left: 1.5px solid rgba(255, 255, 255, 0.2); padding-left: 15px; }
+        .canva-header .right-section { display: flex; align-items: center; gap: 12px; }
+        .btn-canva {
+            background: rgba(255, 255, 255, 0.08);
+            color: #E2E8F0; border: 1.5px solid rgba(255, 255, 255, 0.2); padding: 8px 16px; border-radius: 12px;
+            font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.25s ease; text-decoration: none;
+        }
+        .btn-canva:hover { background: rgba(255, 255, 255, 0.15); border-color: #FEA116; color: #FEA116; transform: translateY(-1px); }
+        .btn-canva.primary { background: linear-gradient(135deg, #FEA116 0%, #D4AF37 100%); color: #0F172B; border: 1px solid #FEA116; font-weight: 700; }
+        .workspace { flex: 1; display: flex; position: relative; overflow: hidden; }
+        .viewport { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1E293B 0%, #0F172A 100%); position: relative; padding: 20px; overflow: hidden; }
+        .slide-stage {
+            width: 1280px; height: 720px; transform-origin: center center;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(254, 161, 22, 0.15);
+            border-radius: 20px; overflow: hidden; background: #FFFFFF;
+            border: 1.5px solid rgba(254, 161, 22, 0.4); position: relative;
+        }
+        .grid-view-container { display: none; width: 100%; height: 100%; overflow-y: auto; padding: 40px; background: #0F172A; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; align-content: start; }
+        .grid-view-container.active { display: grid; }
+        .grid-item { background: rgba(30, 41, 59, 0.9); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 14px; padding: 14px; cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; gap: 10px; color: #F8FAFC; }
+        .grid-item:hover { border-color: #FEA116; transform: translateY(-3px); }
+        .grid-item.active { border-color: #FEA116; box-shadow: 0 0 16px rgba(254, 161, 22, 0.4); }
+        .grid-preview-wrapper { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 8px; background: #1E293B; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .grid-label { color: #FEA116; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; }
+        .slide-container { align-items: flex-start; background-color: #FFFFFF; display: none; flex-direction: column; height: 100%; justify-content: flex-start; padding: 45px 55px; position: relative; width: 100%; color: #334155; }
+        .slide-container.active-slide { display: flex; }
+        .slide-container::before { content: ''; position: absolute; top: 0; right: 0; width: 450px; height: 450px; background: radial-gradient(circle at top right, rgba(254, 161, 22, 0.12) 0%, rgba(255, 255, 255, 0) 70%); pointer-events: none; z-index: 0; }
+        .slide-container > * { position: relative; z-index: 1; }
+        .slide-number { position: absolute; bottom: 20px; right: 30px; font-size: 13px; font-weight: 700; color: #64748B; }
+        .slide-footer-tag { position: absolute; bottom: 20px; left: 30px; font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 1px; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; color: #0F172B; }
+        .slide-title { font-size: 28px; font-weight: 700; color: #0F172B; margin-bottom: 20px; width: 100%; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .slide-title .category-tag { font-size: 11.5px; font-weight: 700; color: #9A6500; background: #FFF4E5; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; border: 1px solid #FFE2B3; }
+        p, li, td, th { font-size: 14px; line-height: 1.5; color: #334155; }
+        p { margin-bottom: 12px; }
+        .content-area { align-items: center; display: flex; flex-direction: column; flex-grow: 1; justify-content: center; width: 100%; }
+        .title-slide-bg { background: linear-gradient(135deg, #0F172B 0%, #1E293B 50%, #0F172B 100%); justify-content: center; align-items: center; text-align: center; padding: 80px; }
+        .title-slide-bg h1 { color: #FFFFFF; font-size: 48px; font-weight: 800; line-height: 1.15; margin-bottom: 18px; }
+        .title-slide-bg h1 span { color: #FEA116; }
+        .title-slide-bg .subtitle { color: #CBD5E1; font-size: 18px; max-width: 850px; margin: 0 auto 30px auto; font-weight: 300; }
+        .title-slide-bg .meta-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(254, 161, 22, 0.15); border: 1.5px solid rgba(254, 161, 22, 0.4); color: #FEA116; padding: 8px 22px; border-radius: 30px; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .section-title-layout { background: linear-gradient(135deg, #0F172B 0%, #1E293B 100%); justify-content: center; align-items: center; text-align: center; width: 100%; }
+        .section-title-layout h2 { color: #FFFFFF; font-size: 42px; font-weight: 700; margin-bottom: 15px; }
+        .section-title-layout p { color: #CBD5E1; font-size: 17px; max-width: 780px; }
+        .section-title-layout hr { background-color: #FEA116; border: none; height: 4px; margin: 20px auto; width: 80px; border-radius: 2px; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: 100%; align-items: stretch; }
+        .two-column.tiled > div { background-color: #F8FAFC; border-radius: 16px; border: 1.5px solid #E2E8F0; padding: 24px; display: flex; flex-direction: column; justify-content: flex-start; }
+        .two-column.tiled h3 { color: #0F172B; font-size: 19px; margin-bottom: 10px; }
+        .tiled-content { display: flex; gap: 20px; width: 100%; }
+        .tile { background-color: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 16px; flex: 1; padding: 22px 18px; text-align: left; display: flex; flex-direction: column; }
+        .tile .icon { background: #FFF4E5; color: #D97706; border: 1px solid #FFE2B3; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
+        .tile h3 { font-size: 17px; margin-bottom: 8px; color: #0F172B; }
+        .highlight-numbers-layout { display: grid; grid-template-columns: 38% 62%; gap: 30px; align-items: center; width: 100%; }
+        .highlight-numbers-layout .number-box { background: linear-gradient(135deg, #0F172B 0%, #1E293B 100%); border: 1.5px solid #FEA116; border-radius: 20px; padding: 28px; text-align: center; color: white; }
+        .highlight-numbers-layout .number { color: #FEA116; font-size: 60px; font-weight: 800; font-family: 'Outfit', sans-serif; line-height: 1; }
+        .highlight-numbers-layout .number-label { color: #E2E8F0; font-size: 14px; font-weight: 600; margin-top: 8px; }
+        .code-block { background: #0F172A; color: #CBD5E1; font-family: 'JetBrains Mono', monospace; padding: 14px 18px; border-radius: 12px; font-size: 12px; line-height: 1.5; border: 1px solid rgba(255, 255, 255, 0.15); width: 100%; overflow-x: auto; }
+        .styled-bullets ul { list-style: none; }
+        .styled-bullets li { position: relative; padding-left: 28px; margin-bottom: 12px; font-size: 14px; color: #334155; }
+        .styled-bullets li i { position: absolute; left: 0; top: 3px; color: #FEA116; font-size: 15px; }
+        .table-layout { width: 100%; border-radius: 12px; overflow: hidden; border: 1.5px solid #CBD5E1; }
+        .table-layout table { border-collapse: collapse; width: 100%; }
+        .table-layout th { background-color: #0F172B; color: #FEA116; font-size: 13.5px; font-weight: 700; padding: 10px 14px; text-align: left; }
+        .table-layout td { border-bottom: 1px solid #E2E8F0; padding: 9px 14px; font-size: 13px; background-color: #FFFFFF; color: #334155; }
+        .table-layout tr:nth-child(even) td { background-color: #F8FAFC; }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); color: #FEA116; border: 1.5px solid rgba(254, 161, 22, 0.4); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; z-index: 10; transition: all 0.2s ease; }
+        .nav-btn:hover { background: #FEA116; color: #0F172B; scale: 1.08; }
+        .nav-btn.prev { left: 25px; } .nav-btn.next { right: 25px; }
+        .bottom-tray { height: 110px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-top: 1.5px solid rgba(254, 161, 22, 0.3); display: flex; align-items: center; padding: 10px 20px; gap: 15px; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #FEA116 #1E293B; }
+        .thumb-item { min-width: 140px; height: 80px; background: #1E293B; border-radius: 8px; border: 1.5px solid rgba(255, 255, 255, 0.1); cursor: pointer; position: relative; overflow: hidden; flex-shrink: 0; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; }
+        .thumb-item:hover { border-color: #FEA116; transform: translateY(-2px); }
+        .thumb-item.active { border-color: #FEA116; box-shadow: 0 0 12px rgba(254, 161, 22, 0.6); }
+        .thumb-number { position: absolute; top: 4px; left: 6px; background: #FEA116; color: #0F172B; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; z-index: 2; }
+        .thumb-preview-text { font-size: 8.5px; font-weight: 600; color: #E2E8F0; padding: 12px 8px; text-align: center; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+        body.present-mode .canva-header, body.present-mode .bottom-tray { display: none !important; }
+        body.present-mode .viewport { padding: 0; background: #000000; }
+        body.present-mode .slide-stage { box-shadow: none; border-radius: 0; border: none; }
+    </style>
+</head>
+<body>
+    <header class="canva-header">
+        <div class="left-section">
+            <div class="canva-logo"><i class="fa-solid fa-hotel"></i> LuxuryStay & Keto HMS | Developer Technical Guide (30 Slides)</div>
+            <div class="deck-title">LuxuryStay & Keto HMS | Developer Technical Guide (30 Slides) (30 Slides)</div>
+        </div>
+        <div class="right-section">
+            <a href="documentation_50_slides.html" class="btn-canva "><i class="fa-solid fa-sitemap"></i> Architecture (50p)</a>
+            <a href="developer_guide_30_slides.html" class="btn-canva primary"><i class="fa-solid fa-code"></i> Developer (30p)</a>
+            <a href="user_guide_30_slides.html" class="btn-canva "><i class="fa-solid fa-users"></i> User Guide (30p)</a>
+            <button class="btn-canva" id="toggleGridViewBtn"><i class="fa-solid fa-border-all"></i> Grid View</button>
+            <button class="btn-canva" id="zoomOutBtn"><i class="fa-solid fa-minus"></i></button>
+            <span id="zoomPercent" style="font-size: 13px; font-weight: 700; color: #FEA116;">100%</span>
+            <button class="btn-canva" id="zoomInBtn"><i class="fa-solid fa-plus"></i></button>
+            <button class="btn-canva primary" id="presentBtn"><i class="fa-solid fa-play"></i> Present</button>
+        </div>
+    </header>
+    <main class="workspace">
+        <div class="viewport" id="viewport">
+            <button class="nav-btn prev" id="prevSlideBtn" title="Previous Slide (←)"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="slide-stage" id="slideStage">
+                
+                <!-- SLIDE 1 -->
+                <div class="slide-container title-slide-bg active-slide" id="slide1">
+                    <div class="meta-badge"><i class="fa-solid fa-layer-group"></i> Developer Technical Reference</div>
+                    <h1>LuxuryStay & Keto HMS <span>Developer Technical Guide</span></h1>
+                    <p class="subtitle">30-Slide Engineering Reference: Local Setup, Node.js/Express Controllers, Mongoose Models, REST API cURL Specifications, Postman Collections, & Testing Pipelines</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 1 of 30</div>
+                </div>
+                <!-- SLIDE 2 -->
+                <div class="slide-container" id="slide2">
+                    <div class="slide-title">Developer Quick Start Prerequisites <span class="category-tag">Setup</span></div>
+                    <div class="content-area">
+                        <div class="two-column"><div class="styled-bullets"><ul><li><i class="fa-brands fa-node-js"></i> <strong>Node.js:</strong> Version v18.x or v20.x+ installed.</li><li><i class="fa-solid fa-database"></i> <strong>MongoDB:</strong> Local mongod instance on port 27017 or MongoDB Atlas URI.</li><li><i class="fa-solid fa-box"></i> <strong>Package Manager:</strong> npm (v9.x+) or yarn.</li></ul></div><div class="code-block"># 1. Clone or navigate to directory
+cd hotel_management_eproject-main
+
+# 2. Install dependencies
+npm install
+
+# 3. Seed demo users and room inventory
+npm run seed
+
+# 4. Start local development server
+npm start</div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 2 of 30</div>
+                </div>
+                <!-- SLIDE 3 -->
+                <div class="slide-container" id="slide3">
+                    <div class="slide-title">Environment Variables (.env) Reference <span class="category-tag">Config</span></div>
+                    <div class="content-area">
+                        <div class="table-layout"><table><thead><tr><th>Variable</th><th>Default Value</th><th>Production Note</th></tr></thead><tbody><tr><td><code>PORT</code></td><td><code>5000</code></td><td>Port Express server binds to.</td></tr><tr><td><code>MONGO_URI</code></td><td><code>mongodb://localhost:27017/luxurystay_db</code></td><td>Use connection string with auth in prod.</td></tr><tr><td><code>JWT_SECRET</code></td><td><code>luxurystay_super_secret_jwt_key_2026</code></td><td>Use 64-character random string.</td></tr><tr><td><code>NODE_ENV</code></td><td><code>development</code></td><td>Set to <code>production</code> for optimized logs.</td></tr></tbody></table></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 3 of 30</div>
+                </div>
+                <!-- SLIDE 4 -->
+                <div class="slide-container" id="slide4">
+                    <div class="slide-title">Database Connection Pattern (config/db.js) <span class="category-tag">Database</span></div>
+                    <div class="content-area">
+                        <div class="code-block">const mongoose = require('mongoose');
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/luxurystay_db');
+    console.log(`[MongoDB Connected]: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`[MongoDB Connection Error]: ${error.message}`);
+  }
+};
+
+module.exports = connectDB;</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 4 of 30</div>
+                </div>
+                <!-- SLIDE 5 -->
+                <div class="slide-container" id="slide5">
+                    <div class="slide-title">Express Server Setup (server.js) <span class="category-tag">Server</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-shield-halved" style="color:#0284C7; margin-right:8px;"></i> Security Middleware</h3><p>Integrates <code>helmet()</code> with disabled CSP for external images, <code>cors()</code> for API clients, and body-parser up to 10MB.</p></div><div><h3><i class="fa-solid fa-folder-tree" style="color:#0284C7; margin-right:8px;"></i> Static Asset Serving</h3><p>Serves the public directory containing Keto HTML templates, animations CSS, and app.js controller.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 5 of 30</div>
+                </div>
+                <!-- SLIDE 6 -->
+                <div class="slide-container" id="slide6">
+                    <div class="slide-title">REST API Routes Mounting Architecture <span class="category-tag">Routes</span></div>
+                    <div class="content-area">
+                        <div class="table-layout"><table><thead><tr><th>Route Base Path</th><th>Handler File</th><th>Primary Responsibilities</th></tr></thead><tbody><tr><td><code>/api/auth</code></td><td><code>routes/authRoutes.js</code></td><td>Login, registration, password hashing, and user profile.</td></tr><tr><td><code>/api/rooms</code></td><td><code>routes/roomRoutes.js</code></td><td>Room inventory catalog, room pricing, and maintenance status.</td></tr><tr><td><code>/api/bookings</code></td><td><code>routes/bookingRoutes.js</code></td><td>Reservation scheduling, check-in, check-out, and cancellation.</td></tr><tr><td><code>/api/invoices</code></td><td><code>routes/invoiceRoutes.js</code></td><td>Automated billing, taxes, payment records, and line items.</td></tr><tr><td><code>/api/housekeeping</code></td><td><code>routes/housekeepingRoutes.js</code></td><td>Room cleaning task allocation and duty rosters.</td></tr></tbody></table></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 6 of 30</div>
+                </div>
+                <!-- SLIDE 7 -->
+                <div class="slide-container section-title-layout" id="slide7">
+                    <hr>
+                    <h2>Section 2: Controller Implementation & Business Logic</h2>
+                    <p>Auth, Room, Booking, Invoice, and Service Controllers</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 7 of 30</div>
+                </div>
+                <!-- SLIDE 8 -->
+                <div class="slide-container" id="slide8">
+                    <div class="slide-title">Auth Controller (controllers/authController.js) <span class="category-tag">Auth Controller</span></div>
+                    <div class="content-area">
+                        <div class="two-column"><div class="styled-bullets"><ul><li><i class="fa-solid fa-key"></i> <strong>Login Handler:</strong> Verifies email and matches bcrypt password hash.</li><li><i class="fa-solid fa-ticket"></i> <strong>JWT Generation:</strong> Signs token payload with user ID and 30-day expiration.</li><li><i class="fa-solid fa-user-plus"></i> <strong>Registration:</strong> Creates default guest account and returns authorization bearer.</li></ul></div><div class="code-block">exports.login = async (req, res, next) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email }).select('+password');
+  if (!user || !(await user.matchPassword(password))) {
+    return res.status(401).json({ success: false, message: 'Invalid credentials' });
+  }
+  const token = user.getSignedJwtToken();
+  res.json({ success: true, token, user });
+};</div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 8 of 30</div>
+                </div>
+                <!-- SLIDE 9 -->
+                <div class="slide-container" id="slide9">
+                    <div class="slide-title">Room Controller (controllers/roomController.js) <span class="category-tag">Room Controller</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-filter" style="color:#0284C7; margin-right:8px;"></i> Dynamic Inventory Filters</h3><p>Supports filtering by status (<code>available</code>, <code>occupied</code>, <code>cleaning</code>), price range, floor, and occupancy limits.</p></div><div><h3><i class="fa-solid fa-pen" style="color:#0284C7; margin-right:8px;"></i> Rate & Status Mutators</h3><p>Atomic operations ensure room states update synchronously during check-ins and maintenance flags.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 9 of 30</div>
+                </div>
+                <!-- SLIDE 10 -->
+                <div class="slide-container" id="slide10">
+                    <div class="slide-title">Booking Controller (controllers/bookingController.js) <span class="category-tag">Booking Controller</span></div>
+                    <div class="content-area">
+                        <div class="two-column"><div class="code-block">// Date overlap conflict prevention query
+const overlapping = await Booking.findOne({
+  room: roomId,
+  bookingStatus: { $in: ['confirmed', 'checked_in'] },
+  $or: [
+    { checkInDate: { $lt: checkOutDate, $gte: checkInDate } },
+    { checkOutDate: { $gt: checkInDate, $lte: checkOutDate } }
+  ]
+});
+if (overlapping) return res.status(400).json({ message: 'Room already booked' });</div><div class="styled-bullets"><ul><li><i class="fa-solid fa-ban"></i> <strong>Conflict Prevention:</strong> Blocks duplicate overlapping date ranges.</li><li><i class="fa-solid fa-file-invoice"></i> <strong>Auto-Invoice Creation:</strong> Instantly spawns invoice record linked to booking ID.</li></ul></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 10 of 30</div>
+                </div>
+                <!-- SLIDE 11 -->
+                <div class="slide-container" id="slide11">
+                    <div class="slide-title">Invoice Controller (controllers/invoiceController.js) <span class="category-tag">Invoice Controller</span></div>
+                    <div class="content-area">
+                        <div class="table-layout"><table><thead><tr><th>Function</th><th>Input Parameters</th><th>Computed Output</th></tr></thead><tbody><tr><td><code>createInvoice</code></td><td>Booking ID, Room Rate, Nights</td><td>Base total, 13% tax, grand total</td></tr><tr><td><code>addServiceCharge</code></td><td>Invoice ID, Line item, Amount</td><td>Appends charge and recalculates balance</td></tr><tr><td><code>recordPayment</code></td><td>Invoice ID, Method, Amount</td><td>Updates payment status to <code>paid</code></td></tr></tbody></table></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 11 of 30</div>
+                </div>
+                <!-- SLIDE 12 -->
+                <div class="slide-container" id="slide12">
+                    <div class="slide-title">Housekeeping Controller (controllers/housekeepingController.js) <span class="category-tag">Housekeeping</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-list-check" style="color:#0284C7; margin-right:8px;"></i> Task Roster Queries</h3><p>Provides task allocation by housekeeper ID, room floor, and priority level.</p></div><div><h3><i class="fa-solid fa-sparkles" style="color:#0284C7; margin-right:8px;"></i> Automated Inventory Release</h3><p>Setting task status to <code>completed</code> instantly changes the underlying room to <code>available</code>.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 12 of 30</div>
+                </div>
+                <!-- SLIDE 13 -->
+                <div class="slide-container" id="slide13">
+                    <div class="slide-title">Centralized Error Handler Middleware <span class="category-tag">Error Handling</span></div>
+                    <div class="content-area">
+                        <div class="code-block">// middleware/errorHandler.js
+const errorHandler = (err, req, res, next) => {
+  let error = { ...err, message: err.message };
+
+  if (err.code === 11000) {
+    error.message = 'Duplicate field value entered';
+    return res.status(400).json({ success: false, message: error.message });
+  }
+
+  if (err.name === 'ValidationError') {
+    error.message = Object.values(err.errors).map(val => val.message).join(', ');
+    return res.status(400).json({ success: false, message: error.message });
+  }
+
+  res.status(error.statusCode || 500).json({
+    success: false,
+    message: error.message || 'Server Internal Error'
+  });
+};</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 13 of 30</div>
+                </div>
+                <!-- SLIDE 14 -->
+                <div class="slide-container" id="slide14">
+                    <div class="slide-title">Input Validation & Sanitization Middleware <span class="category-tag">Validation</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-filter" style="color:#0284C7; margin-right:8px;"></i> Schema Field Validation</h3><p>Validates required email formats, valid ISO date strings, and positive price numbers before reaching database.</p></div><div><h3><i class="fa-solid fa-shield-virus" style="color:#0284C7; margin-right:8px;"></i> NoSQL Injection Sanitization</h3><p>Strips MongoDB query operator characters (<code>$gt</code>, <code>$where</code>) from user input payloads.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 14 of 30</div>
+                </div>
+                <!-- SLIDE 15 -->
+                <div class="slide-container section-title-layout" id="slide15">
+                    <hr>
+                    <h2>Section 3: REST API Specifications & cURL Samples</h2>
+                    <p>Authentication, Room Queries, Reservations, Invoicing and cURL Commands</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 15 of 30</div>
+                </div>
+                <!-- SLIDE 16 -->
+                <div class="slide-container" id="slide16">
+                    <div class="slide-title">API Specification: User Login <span class="category-tag">POST /api/auth/login</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Request:
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@luxurystay.com", "password": "admin123"}'
+
+# Response (HTTP 200 OK):
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "_id": "665f12a3bc89120034a1",
+    "name": "System Administrator",
+    "email": "admin@luxurystay.com",
+    "role": "admin"
+  }
+}</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 16 of 30</div>
+                </div>
+                <!-- SLIDE 17 -->
+                <div class="slide-container" id="slide17">
+                    <div class="slide-title">API Specification: User Registration <span class="category-tag">POST /api/auth/register</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Request:
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John Doe", "email": "john@example.com", "password": "securepassword123", "phone": "+1234567890"}'
+
+# Response (HTTP 201 Created):
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "_id": "665f13c8...",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "guest"
+  }
+}</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 17 of 30</div>
+                </div>
+                <!-- SLIDE 18 -->
+                <div class="slide-container" id="slide18">
+                    <div class="slide-title">API Specification: Filtered Room Catalog <span class="category-tag">GET /api/rooms</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Query rooms by status and roomType
+curl -X GET "http://localhost:5000/api/rooms?status=available&roomType=Executive%20Suite"
+
+# Response (HTTP 200 OK):
+{
+  "success": true,
+  "count": 3,
+  "rooms": [
+    {
+      "_id": "665f14e2...",
+      "roomNumber": "301",
+      "roomType": "Executive Suite",
+      "pricePerNight": 249,
+      "status": "available",
+      "maxOccupancy": 2,
+      "amenities": ["WiFi", "Jacuzzi", "Mini-Bar", "Balcony"]
+    }
+  ]
+}</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 18 of 30</div>
+                </div>
+                <!-- SLIDE 19 -->
+                <div class="slide-container" id="slide19">
+                    <div class="slide-title">API Specification: Create Room Inventory <span class="category-tag">POST /api/rooms</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Create new room (Admin / Manager only)
+curl -X POST http://localhost:5000/api/rooms \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <ADMIN_TOKEN>" \
+  -d '{
+    "roomNumber": "405",
+    "roomType": "Presidential Suite",
+    "pricePerNight": 499,
+    "maxOccupancy": 4,
+    "amenities": ["Private Pool", "Butler", "Panoramic View", "Jacuzzi"]
+  }'
+
+# Response (HTTP 201 Created):
+{ "success": true, "room": { "_id": "665f17a1...", "roomNumber": "405", "status": "available" } }</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 19 of 30</div>
+                </div>
+                <!-- SLIDE 20 -->
+                <div class="slide-container" id="slide20">
+                    <div class="slide-title">API Specification: Create Reservation <span class="category-tag">POST /api/bookings</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Create new guest booking
+curl -X POST http://localhost:5000/api/bookings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{
+    "room": "665f14e2...",
+    "checkInDate": "2026-10-15",
+    "checkOutDate": "2026-10-18",
+    "guests": 2,
+    "specialRequests": "Late check-in requested"
+  }'
+
+# Response (HTTP 201 Created):
+{
+  "success": true,
+  "booking": { "_id": "665f190a...", "bookingStatus": "confirmed", "totalAmount": 747 },
+  "invoice": { "_id": "665f190b...", "invoiceNumber": "INV-2026-0042", "taxAmount": 97.11, "grandTotal": 844.11 }
+}</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 20 of 30</div>
+                </div>
+                <!-- SLIDE 21 -->
+                <div class="slide-container" id="slide21">
+                    <div class="slide-title">API Specification: Guest Check-in / Out <span class="category-tag">PUT /api/bookings/:id/checkin</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Front Desk Guest Check-in:
+curl -X PUT http://localhost:5000/api/bookings/665f190a/checkin \
+  -H "Authorization: Bearer <RECEPTION_TOKEN>"
+
+# Response:
+{ "success": true, "message": "Guest checked in successfully", "roomStatus": "occupied" }
+
+# Front Desk Guest Check-out:
+curl -X PUT http://localhost:5000/api/bookings/665f190a/checkout \
+  -H "Authorization: Bearer <RECEPTION_TOKEN>"
+
+# Response:
+{ "success": true, "message": "Guest checked out successfully", "roomStatus": "cleaning" }</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 21 of 30</div>
+                </div>
+                <!-- SLIDE 22 -->
+                <div class="slide-container" id="slide22">
+                    <div class="slide-title">API Specification: Generate Folio Invoice <span class="category-tag">GET /api/invoices/:id</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Fetch detailed invoice folio
+curl -X GET http://localhost:5000/api/invoices/665f190b \
+  -H "Authorization: Bearer <TOKEN>"
+
+# Response (HTTP 200 OK):
+{
+  "success": true,
+  "invoice": {
+    "invoiceNumber": "INV-2026-0042",
+    "guestName": "John Doe",
+    "roomNumber": "301",
+    "nights": 3,
+    "roomCharge": 747.00,
+    "extraCharges": 50.00,
+    "taxAmount": 103.61,
+    "grandTotal": 900.61,
+    "paymentStatus": "paid"
+  }
+}</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 22 of 30</div>
+                </div>
+                <!-- SLIDE 23 -->
+                <div class="slide-container" id="slide23">
+                    <div class="slide-title">API Specification: Housekeeping Task Update <span class="category-tag">PUT /api/housekeeping/:id</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Mark room cleaned and ready
+curl -X PUT http://localhost:5000/api/housekeeping/665f210c \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <HOUSEKEEPING_TOKEN>" \
+  -d '{"status": "completed", "notes": "Sanitized and restocked"}'
+
+# Response (HTTP 200 OK):
+{ "success": true, "message": "Task completed. Room 301 is now available for booking." }</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 23 of 30</div>
+                </div>
+                <!-- SLIDE 24 -->
+                <div class="slide-container section-title-layout" id="slide24">
+                    <hr>
+                    <h2>Section 4: Testing, Postman & Debugging</h2>
+                    <p>Postman Integration, Automated Testing, Seeder Execution, and Production Builds</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 24 of 30</div>
+                </div>
+                <!-- SLIDE 25 -->
+                <div class="slide-container" id="slide25">
+                    <div class="slide-title">Postman Collection Setup <span class="category-tag">Postman Guide</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-file-code" style="color:#0284C7; margin-right:8px;"></i> File: LuxuryStay_Postman_Collection.json</h3><p>Pre-built Postman collection with environment variables for local testing (<code>{{base_url}}</code>, <code>{{token}}</code>).</p></div><div><h3><i class="fa-solid fa-play" style="color:#0284C7; margin-right:8px;"></i> Automated Collection Runner</h3><p>Import into Postman and execute collection runner to validate all 20+ endpoints in a single test run.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 25 of 30</div>
+                </div>
+                <!-- SLIDE 26 -->
+                <div class="slide-container" id="slide26">
+                    <div class="slide-title">Automated API Test Suite Execution <span class="category-tag">npm test</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Run automated API test suite
+npm test
+
+# Expected Output:
+=========================================
+ LuxuryStay API Automated Test Runner
+=========================================
+[PASS] Health Check Endpoint (200 OK)
+[PASS] DB Status Endpoint (Connected: true)
+[PASS] Admin Login & JWT Generation (200 OK)
+[PASS] Get All Available Rooms (Array > 0)
+[PASS] Prevent Overlapping Double Booking (400 Bad Request)
+-----------------------------------------
+Test Summary: 5/5 Test Suites Passed (100%)</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 26 of 30</div>
+                </div>
+                <!-- SLIDE 27 -->
+                <div class="slide-container" id="slide27">
+                    <div class="slide-title">Database Seeding Pipeline <span class="category-tag">npm run seed</span></div>
+                    <div class="content-area">
+                        <div class="code-block"># Populate demo users & 15 luxury rooms
+npm run seed
+
+# Output:
+[Seed Data] Clearing existing database collections...
+[Seed Data] Creating 5 Demo User Accounts (Admin, Manager, Reception, Housekeeper, Guest)...
+[Seed Data] Populating 15 Luxury Hotel Rooms across 5 floors...
+[Seed Data] Creating initial reservations and invoices...
+[Seed Data] Database seeded successfully!</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 27 of 30</div>
+                </div>
+                <!-- SLIDE 28 -->
+                <div class="slide-container" id="slide28">
+                    <div class="slide-title">Production Build & Docker Deployment <span class="category-tag">DevOps</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-box" style="color:#0284C7; margin-right:8px;"></i> Docker Containerization</h3><p>Run <code>docker build -t luxurystay-hms .</code> followed by <code>docker run -p 5000:5000 luxurystay-hms</code>.</p></div><div><h3><i class="fa-solid fa-server" style="color:#0284C7; margin-right:8px;"></i> Process Management (PM2)</h3><p>Deploy with <code>pm2 start server.js --name luxurystay -i max</code> for multi-core load clustering.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 28 of 30</div>
+                </div>
+                <!-- SLIDE 29 -->
+                <div class="slide-container title-slide-bg" id="slide29">
+                    <div class="meta-badge"><i class="fa-solid fa-layer-group"></i> Developer Technical Guide Sign-off</div>
+                    <h1>LuxuryStay & Keto <span>Developer Guide Complete</span></h1>
+                    <p class="subtitle">Complete 30-Slide Engineering Reference & REST API Documentation.</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 29 of 30</div>
+                </div>
+            </div>
+            <div class="grid-view-container" id="gridViewContainer"></div>
+            <button class="nav-btn next" id="nextSlideBtn" title="Next Slide (→)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </main>
+    <footer class="bottom-tray" id="bottomTray"></footer>
+    <script>
+        const totalSlides = 30;
+        let currentSlide = 1;
+        let currentScale = 1;
+        const slides = document.querySelectorAll('.slide-container');
+        const slideStage = document.getElementById('slideStage');
+        const viewport = document.getElementById('viewport');
+        const bottomTray = document.getElementById('bottomTray');
+        const gridViewContainer = document.getElementById('gridViewContainer');
+        const zoomPercent = document.getElementById('zoomPercent');
+
+        function autoScaleStage() {
+            if (document.body.classList.contains('present-mode')) {
+                const scaleX = window.innerWidth / 1280;
+                const scaleY = window.innerHeight / 720;
+                const scale = Math.min(scaleX, scaleY);
+                slideStage.style.transform = `scale(${scale})`;
+                return;
+            }
+            const availWidth = viewport.clientWidth - 100;
+            const availHeight = viewport.clientHeight - 80;
+            const fitScale = Math.min(availWidth / 1280, availHeight / 720);
+            currentScale = fitScale;
+            applyScale();
+        }
+
+        function applyScale() {
+            slideStage.style.transform = `scale(${currentScale})`;
+            zoomPercent.innerText = `${Math.round(currentScale * 100)}%`;
+        }
+
+        function generateThumbnails() {
+            slides.forEach((slide, index) => {
+                const slideNum = index + 1;
+                const titleText = slide.querySelector('.slide-title')?.innerText || slide.querySelector('h1')?.innerText || slide.querySelector('h2')?.innerText || `Slide ${slideNum}`;
+                const thumb = document.createElement('div');
+                thumb.className = `thumb-item ${slideNum === 1 ? 'active' : ''}`;
+                thumb.dataset.slide = slideNum;
+                thumb.innerHTML = `
+                    <div class="thumb-number">${slideNum}</div>
+                    <div class="thumb-preview-text">${titleText.substring(0, 35)}</div>
+                `;
+                thumb.addEventListener('click', () => goToSlide(slideNum));
+                bottomTray.appendChild(thumb);
+
+                const gridItem = document.createElement('div');
+                gridItem.className = `grid-item ${slideNum === 1 ? 'active' : ''}`;
+                gridItem.dataset.slide = slideNum;
+                gridItem.innerHTML = `
+                    <div class="grid-label">
+                        <span>Slide ${slideNum}</span>
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div class="grid-preview-wrapper">
+                        <div style="font-size:11px; padding:12px; color:#FEA116; font-weight:600;">
+                            ${titleText}
+                        </div>
+                    </div>
+                `;
+                gridItem.addEventListener('click', () => {
+                    goToSlide(slideNum);
+                    toggleGridView(false);
+                });
+                gridViewContainer.appendChild(gridItem);
+            });
+        }
+
+        function goToSlide(slideNum) {
+            if (slideNum < 1 || slideNum > totalSlides) return;
+            slides.forEach((s, idx) => { s.classList.toggle('active-slide', idx + 1 === slideNum); });
+            document.querySelectorAll('.thumb-item').forEach((t, idx) => {
+                t.classList.toggle('active', idx + 1 === slideNum);
+                if (idx + 1 === slideNum) { t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }
+            });
+            document.querySelectorAll('.grid-item').forEach((g, idx) => { g.classList.toggle('active', idx + 1 === slideNum); });
+            currentSlide = slideNum;
+        }
+
+        function toggleGridView(forceState) {
+            const isGrid = forceState !== undefined ? forceState : gridViewContainer.style.display !== 'grid';
+            if (isGrid) { gridViewContainer.style.display = 'grid'; slideStage.style.display = 'none'; }
+            else { gridViewContainer.style.display = 'none'; slideStage.style.display = 'block'; }
+        }
+
+        document.getElementById('prevSlideBtn').addEventListener('click', () => goToSlide(currentSlide - 1));
+        document.getElementById('nextSlideBtn').addEventListener('click', () => goToSlide(currentSlide + 1));
+        document.getElementById('zoomInBtn').addEventListener('click', () => { currentScale += 0.1; applyScale(); });
+        document.getElementById('zoomOutBtn').addEventListener('click', () => { currentScale = Math.max(0.3, currentScale - 0.1); applyScale(); });
+        document.getElementById('toggleGridViewBtn').addEventListener('click', () => toggleGridView());
+        document.getElementById('presentBtn').addEventListener('click', () => {
+            document.body.classList.add('present-mode');
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => console.warn(err));
+            }
+            autoScaleStage();
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) { document.body.classList.remove('present-mode'); autoScaleStage(); }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') { goToSlide(currentSlide + 1); }
+            else if (e.key === 'ArrowLeft') { goToSlide(currentSlide - 1); }
+            else if (e.key === 'Escape') { toggleGridView(false); if (document.body.classList.contains('present-mode')) { document.body.classList.remove('present-mode'); autoScaleStage(); } }
+        });
+
+        window.addEventListener('resize', autoScaleStage);
+        generateThumbnails();
+        autoScaleStage();
+    </script>
+</body>
+</html>

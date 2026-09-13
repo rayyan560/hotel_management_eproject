@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LuxuryStay Hospitality - Hotel Management System (HMS)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/copilot.css">
+</head>
+<body>
+  <!-- Staff Authentication Login Overlay -->
+  <div id="staffAuthOverlay" class="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-brand-logo">LS</div>
+        <h2>STAFF PORTAL LOGIN</h2>
+        <p>LuxuryStay Hospitality & Suites Management Workstation</p>
+      </div>
+
+      <!-- Quick Demo Credentials Mailbox Bar -->
+      <div class="auth-mailbox-trigger-bar">
+        <span>📬 Staff Accounts Mailbox:</span>
+        <button type="button" class="btn-mailbox" onclick="openCredentialsMailboxModal()">
+          📬 Demo Credentials Mailbox
+        </button>
+      </div>
+
+      <div id="authAlertBanner" class="alert-banner error hidden"></div>
+
+      <form id="staffLoginForm" onsubmit="handleStaffLogin(event)">
+        <div class="form-group">
+          <label for="loginEmail">Email Address / Staff ID</label>
+          <input type="email" id="loginEmail" placeholder="e.g. admin@luxurystay.com" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" id="loginSubmitBtn" class="btn btn-gold btn-block" style="padding:12px;font-weight:700;font-size:14px;margin-top:10px;">
+          🔒 Sign In to Workstation
+        </button>
+      </form>
+
+      <div style="margin-top:20px;text-align:center;">
+        <span style="font-size:11px;color:var(--text-muted);">Quick 1-Click Role Switch:</span>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px;">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="autofillAndLogin('admin')">👑 Admin</button>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="autofillAndLogin('manager')">👔 Manager</button>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="autofillAndLogin('receptionist')">🛎️ Receptionist</button>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="autofillAndLogin('housekeeping')">🧹 Housekeeping</button>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="autofillAndLogin('guest')">🧳 Guest</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="brand-logo">LS</div>
+      <div class="brand-text">
+        <h1>LUXURYSTAY</h1>
+        <span>HOSPITALITY & SUITES</span>
+      </div>
+    </div>
+
+    <div class="nav-auth-status">
+      <a href="/" style="background:#fea116;color:#0F172B;padding:7px 12px;border-radius:6px;text-decoration:none;font-weight:700;font-size:12.5px;display:inline-flex;align-items:center;gap:5px;margin-right:6px;box-shadow: 0 2px 8px rgba(254,161,22,0.3);">
+        🏨 Guest Web
+      </a>
+      <button type="button" class="btn-mailbox me-2" onclick="openCredentialsMailboxModal()" style="margin-right:8px;">
+        📬 Staff Mailbox
+      </button>
+
+      <div class="role-selector-box" style="margin-right:10px;">
+        <label for="quickRoleSelect">Active Role:</label>
+        <select id="quickRoleSelect" onchange="quickSwitchRole(this.value)">
+          <option value="admin">👑 Alexander (Admin)</option>
+          <option value="manager">👔 Eleanor (Manager)</option>
+          <option value="receptionist">🛎️ Marcus (Receptionist)</option>
+          <option value="housekeeping">🧹 Maria (Housekeeping)</option>
+          <option value="guest">🧳 James (Guest)</option>
+        </select>
+      </div>
+
+      <div class="user-profile-badge" id="userProfileBadge">
+        <img id="userAvatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Avatar">
+        <div class="user-meta">
+          <span class="user-name" id="userNameDisplay">Admin User</span>
+          <span class="badge badge-gold" id="userRoleBadge">ADMIN</span>
+        </div>
+      </div>
+
+      <button class="btn-logout" onclick="logoutUser()" style="margin-left:12px;">
+        🚪 Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container with Sidebar & Content -->
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <nav class="side-menu">
+        <button class="nav-btn active" onclick="showTab('dashboard')">
+          <span class="icon">📊</span> Overview & Analytics
+        </button>
+        <button class="nav-btn" onclick="showTab('rooms')">
+          <span class="icon">🛏️</span> Room Inventory
+        </button>
+        <button class="nav-btn" onclick="showTab('bookings')">
+          <span class="icon">📅</span> Reservations & Stays
+        </button>
+        <button class="nav-btn" onclick="showTab('billing')">
+          <span class="icon">💳</span> Billing & Invoicing
+        </button>
+        <button class="nav-btn" onclick="showTab('housekeeping')">
+          <span class="icon">🧹</span> Housekeeping
+        </button>
+        <button class="nav-btn" onclick="showTab('maintenance')">
+          <span class="icon">🔧</span> Maintenance
+        </button>
+        <button class="nav-btn" onclick="showTab('services')">
+          <span class="icon">🛎️</span> Guest Services
+        </button>
+        <button class="nav-btn" onclick="showTab('reviews')">
+          <span class="icon">🌟</span> Ratings & Reviews
+        </button>
+        <button class="nav-btn" onclick="showTab('users')">
+          <span class="icon">👥</span> Staff & Guests
+        </button>
+        <button class="nav-btn" onclick="showTab('api-explorer')">
+          <span class="icon">⚡</span> Live API Explorer
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <span class="status-dot"></span> Backend API: <strong>Online (Port 5000)</strong>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Workspace Area -->
+    <main class="main-content">
+      <!-- Alerts Banner -->
+      <div id="alertBanner" class="alert-banner hidden"></div>
+
+      <!-- TAB 1: OVERVIEW & ANALYTICS -->
+      <section id="tab-dashboard" class="tab-pane active">
+        <div class="page-header">
+          <div>
+            <h2>Executive Dashboard & Real-Time KPIs</h2>
+            <p class="subtitle">Operational metrics, occupancy statistics, and financial health.</p>
+          </div>
+          <button class="btn btn-primary" onclick="loadDashboardStats()">🔄 Refresh Data</button>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon gold">🏨</div>
+            <div class="stat-info">
+              <span class="stat-label">Occupancy Rate</span>
+              <h3 class="stat-value" id="kpiOccupancy">0%</h3>
+              <span class="stat-hint" id="kpiOccupancyHint">0 of 0 Rooms Occupied</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon emerald">💵</div>
+            <div class="stat-info">
+              <span class="stat-label">Total Revenue</span>
+              <h3 class="stat-value" id="kpiRevenue">$0.00</h3>
+              <span class="stat-hint" id="kpiPaidHint">$0.00 collected</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon indigo">🛎️</div>
+            <div class="stat-info">
+              <span class="stat-label">Active Guests</span>
+              <h3 class="stat-value" id="kpiActiveGuests">0</h3>
+              <span class="stat-hint" id="kpiConfirmedHint">0 upcoming reservations</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon amber">🧹</div>
+            <div class="stat-info">
+              <span class="stat-label">Pending Operations</span>
+              <h3 class="stat-value" id="kpiOperations">0</h3>
+              <span class="stat-hint" id="kpiOpsHint">0 Housekeeping / 0 Maintenance</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Room Status Breakdown Visual -->
+        <div class="dashboard-cards-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3>🏨 Room Inventory Status Breakdown</h3>
+            </div>
+            <div class="card-body">
+              <div class="status-bars" id="roomStatusBars">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>⚡ Quick Management Actions</h3>
+            </div>
+            <div class="card-body action-buttons-grid">
+              <button class="btn btn-gold" onclick="openNewBookingModal()">➕ Reserve New Room</button>
+              <button class="btn btn-secondary" onclick="openNewRoomModal()">🛏️ Add Room to Inventory</button>
+              <button class="btn btn-secondary" onclick="openNewServiceModal()">🛎️ Dispatch Guest Service</button>
+              <button class="btn btn-secondary" onclick="openNewMaintenanceModal()">🔧 Report Maintenance Ticket</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: ROOM INVENTORY -->
+      <section id="tab-rooms" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>Room Inventory & Real-Time Status</h2>
+            <p class="subtitle">Filter rooms, update statuses (Available, Occupied, Cleaning, Maintenance), or create rooms.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewRoomModal()">➕ Add New Room</button>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-bar">
+          <select id="roomFilterType" onchange="loadRooms()">
+            <option value="">All Room Types</option>
+            <option value="Single">Single</option>
+            <option value="Double">Double</option>
+            <option value="Deluxe">Deluxe</option>
+            <option value="Luxury Suite">Luxury Suite</option>
+            <option value="Presidential Suite">Presidential Suite</option>
+          </select>
+
+          <select id="roomFilterStatus" onchange="loadRooms()">
+            <option value="">All Statuses</option>
+            <option value="Available">🟢 Available</option>
+            <option value="Occupied">🔴 Occupied</option>
+            <option value="Cleaning">🟡 Cleaning</option>
+            <option value="Maintenance">🟠 Maintenance</option>
+          </select>
+
+          <button class="btn btn-secondary" onclick="loadRooms()">Filter</button>
+        </div>
+
+        <!-- Rooms Grid -->
+        <div class="rooms-grid" id="roomsGrid">
+          <!-- Room cards injected by JS -->
+        </div>
+      </section>
+
+      <!-- TAB 3: RESERVATIONS & STAYS -->
+      <section id="tab-bookings" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>Reservations, Check-Ins & Check-Outs</h2>
+            <p class="subtitle">Complete booking lifecycle management with instant check-in/out and automated housekeeping triggers.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewBookingModal()">➕ Create Reservation</button>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Booking Code</th>
+                    <th>Guest</th>
+                    <th>Room</th>
+                    <th>Dates</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingsTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: BILLING & INVOICING -->
+      <section id="tab-billing" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>Guest Invoicing & Service Charges</h2>
+            <p class="subtitle">Itemized charges, restaurant & room service add-ons, payments, and official printable receipts.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Guest Name</th>
+                    <th>Room</th>
+                    <th>Subtotal</th>
+                    <th>Tax (12%)</th>
+                    <th>Grand Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="invoicesTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: HOUSEKEEPING -->
+      <section id="tab-housekeeping" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>Housekeeping Schedule & Cleaning Workflow</h2>
+            <p class="subtitle">Manage room cleaning assignments, update progress, and auto-return cleaned rooms to Available.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewTaskModal()">➕ New Housekeeping Task</button>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Task #</th>
+                    <th>Room</th>
+                    <th>Task Type</th>
+                    <th>Priority</th>
+                    <th>Assigned To</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="housekeepingTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: MAINTENANCE -->
+      <section id="tab-maintenance" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>Facility & Room Maintenance Tickets</h2>
+            <p class="subtitle">Log electrical, plumbing, HVAC issues, track repairs, and log resolution costs.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewMaintenanceModal()">➕ Report Maintenance Issue</button>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Ticket #</th>
+                    <th>Location / Room</th>
+                    <th>Category</th>
+                    <th>Issue</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Technician</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="maintenanceTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 7: GUEST SERVICES -->
+      <section id="tab-services" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>Guest Concierge & Room Service Requests</h2>
+            <p class="subtitle">Wake-up calls, airport shuttles, dining, and custom hospitality requests.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewServiceModal()">➕ Request Service</button>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Request #</th>
+                    <th>Guest</th>
+                    <th>Room</th>
+                    <th>Service Type</th>
+                    <th>Details</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="servicesTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 8: RATINGS & REVIEWS -->
+      <section id="tab-reviews" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>Guest Feedback & Ratings</h2>
+            <p class="subtitle">Review guest feedback and submit official management replies.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewFeedbackModal()">✍️ Submit Review</button>
+        </div>
+
+        <div id="feedbackStatsCard" class="stats-grid mb-4">
+          <!-- Injected via JS -->
+        </div>
+
+        <div class="reviews-list" id="feedbackList">
+          <!-- Injected via JS -->
+        </div>
+      </section>
+
+      <!-- TAB 9: USERS & STAFF -->
+      <section id="tab-users" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>User Management & Staff Roles</h2>
+            <p class="subtitle">Administer roles (Admin, Manager, Receptionist, Housekeeping, Guest) and account statuses.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewUserModal()">➕ Register Staff / Guest</button>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 10: LIVE API EXPLORER -->
+      <section id="tab-api-explorer" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>⚡ Live REST API Explorer</h2>
+            <p class="subtitle">Execute live HTTP requests against any backend endpoint with automatic JWT authorization header injection.</p>
+          </div>
+        </div>
+
+        <div class="api-explorer-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3>Request Parameters</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>Preset Endpoints:</label>
+                <select id="apiPresetSelect" onchange="applyApiPreset(this.value)">
+                  <option value="GET /api/reports/overview">GET /api/reports/overview (Dashboard KPIs)</option>
+                  <option value="GET /api/rooms">GET /api/rooms (All Rooms)</option>
+                  <option value="GET /api/bookings">GET /api/bookings (All Bookings)</option>
+                  <option value="GET /api/invoices">GET /api/invoices (All Invoices)</option>
+                  <option value="GET /api/housekeeping">GET /api/housekeeping (Housekeeping Tasks)</option>
+                  <option value="GET /api/maintenance">GET /api/maintenance (Maintenance Tickets)</option>
+                  <option value="GET /api/services">GET /api/services (Guest Services)</option>
+                  <option value="GET /api/feedback">GET /api/feedback (Guest Reviews)</option>
+                  <option value="GET /api/auth/me">GET /api/auth/me (Current Profile)</option>
+                  <option value="GET /api/settings">GET /api/settings (System Config)</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                  <label>HTTP Method:</label>
+                  <select id="apiMethod">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="PATCH">PATCH</option>
+                    <option value="DELETE">DELETE</option>
+                  </select>
+                </div>
+                <div class="form-group" style="flex: 3;">
+                  <label>Endpoint URL:</label>
+                  <input type="text" id="apiUrl" value="/api/reports/overview">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>JSON Request Body (For POST/PUT/PATCH):</label>
+                <textarea id="apiBody" rows="5" placeholder="{ }"></textarea>
+              </div>
+
+              <button class="btn btn-gold btn-block" onclick="executeApiTest()">🚀 Send Request</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Live JSON Response</h3>
+              <span class="badge" id="apiStatusBadge">Status: Ready</span>
+            </div>
+            <div class="card-body">
+              <pre class="json-viewer" id="apiResponseViewer">// Response payload will appear here...</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL CONTAINER (Dynamic for forms) -->
+  <div id="genericModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Modal Title</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMO CREDENTIALS MAILBOX POPUP MODAL -->
+  <div id="credentialsMailboxModal" class="modal-overlay hidden">
+    <div class="modal-card credentials-mailbox-modal">
+      <div class="modal-header">
+        <h3>📬 Staff & Admin Demo Credentials Mailbox</h3>
+        <button class="modal-close" onclick="closeCredentialsMailboxModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+          Select any staff role below to auto-fill the login form, or click copy to copy credentials to your clipboard.
+        </p>
+
+        <div class="credentials-list">
+          <div class="credential-item">
+            <div class="credential-info">
+              <span class="credential-role-title">👑 Administrator (Alexander Sterling)</span>
+              <span class="credential-details">Email: <strong>admin@luxurystay.com</strong> &nbsp;|&nbsp; Pass: <strong>admin123</strong></span>
+            </div>
+            <div class="credential-actions">
+              <button class="btn-copy-cred" onclick="copyToClipboard('admin@luxurystay.com', 'admin123')">📋 Copy</button>
+              <button class="btn-autofill" onclick="autofillFromMailbox('admin@luxurystay.com', 'admin123')">⚡ Select & Login</button>
+            </div>
+          </div>
+
+          <div class="credential-item">
+            <div class="credential-info">
+              <span class="credential-role-title">👔 General Manager (Eleanor Vance)</span>
+              <span class="credential-details">Email: <strong>manager@luxurystay.com</strong> &nbsp;|&nbsp; Pass: <strong>manager123</strong></span>
+            </div>
+            <div class="credential-actions">
+              <button class="btn-copy-cred" onclick="copyToClipboard('manager@luxurystay.com', 'manager123')">📋 Copy</button>
+              <button class="btn-autofill" onclick="autofillFromMailbox('manager@luxurystay.com', 'manager123')">⚡ Select & Login</button>
+            </div>
+          </div>
+
+          <div class="credential-item">
+            <div class="credential-info">
+              <span class="credential-role-title">🛎️ Head Concierge / Reception (Marcus Brody)</span>
+              <span class="credential-details">Email: <strong>reception@luxurystay.com</strong> &nbsp;|&nbsp; Pass: <strong>reception123</strong></span>
+            </div>
+            <div class="credential-actions">
+              <button class="btn-copy-cred" onclick="copyToClipboard('reception@luxurystay.com', 'reception123')">📋 Copy</button>
+              <button class="btn-autofill" onclick="autofillFromMailbox('reception@luxurystay.com', 'reception123')">⚡ Select & Login</button>
+            </div>
+          </div>
+
+          <div class="credential-item">
+            <div class="credential-info">
+              <span class="credential-role-title">🧹 Housekeeping Supervisor (Maria Santos)</span>
+              <span class="credential-details">Email: <strong>housekeeping@luxurystay.com</strong> &nbsp;|&nbsp; Pass: <strong>housekeeping123</strong></span>
+            </div>
+            <div class="credential-actions">
+              <button class="btn-copy-cred" onclick="copyToClipboard('housekeeping@luxurystay.com', 'housekeeping123')">📋 Copy</button>
+              <button class="btn-autofill" onclick="autofillFromMailbox('housekeeping@luxurystay.com', 'housekeeping123')">⚡ Select & Login</button>
+            </div>
+          </div>
+
+          <div class="credential-item">
+            <div class="credential-info">
+              <span class="credential-role-title">🧳 Hotel Guest (James Walker)</span>
+              <span class="credential-details">Email: <strong>guest@luxurystay.com</strong> &nbsp;|&nbsp; Pass: <strong>guest123</strong></span>
+            </div>
+            <div class="credential-actions">
+              <button class="btn-copy-cred" onclick="copyToClipboard('guest@luxurystay.com', 'guest123')">📋 Copy</button>
+              <button class="btn-autofill" onclick="autofillFromMailbox('guest@luxurystay.com', 'guest123')">⚡ Select & Login</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="js/copilot.js"></script>
+</body>
+</html>

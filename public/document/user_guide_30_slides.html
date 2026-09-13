@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxuryStay & Keto HMS | User & Staff Operations Manual (30 Slides)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(135deg, #0B132B 0%, #1C2541 50%, #0F172A 100%);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #E2E8F0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
+        .canva-header {
+            height: 60px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1.5px solid rgba(254, 161, 22, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            color: #F8FAFC;
+            z-index: 100;
+        }
+        .canva-header .left-section { display: flex; align-items: center; gap: 15px; }
+        .canva-logo {
+            display: flex; align-items: center; gap: 10px;
+            font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px;
+            color: #FEA116; background: rgba(254, 161, 22, 0.15);
+            padding: 6px 14px; border-radius: 30px; border: 1.5px solid rgba(254, 161, 22, 0.4);
+        }
+        .deck-title { font-size: 14.5px; font-weight: 600; color: #E2E8F0; border-left: 1.5px solid rgba(255, 255, 255, 0.2); padding-left: 15px; }
+        .canva-header .right-section { display: flex; align-items: center; gap: 12px; }
+        .btn-canva {
+            background: rgba(255, 255, 255, 0.08);
+            color: #E2E8F0; border: 1.5px solid rgba(255, 255, 255, 0.2); padding: 8px 16px; border-radius: 12px;
+            font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.25s ease; text-decoration: none;
+        }
+        .btn-canva:hover { background: rgba(255, 255, 255, 0.15); border-color: #FEA116; color: #FEA116; transform: translateY(-1px); }
+        .btn-canva.primary { background: linear-gradient(135deg, #FEA116 0%, #D4AF37 100%); color: #0F172B; border: 1px solid #FEA116; font-weight: 700; }
+        .workspace { flex: 1; display: flex; position: relative; overflow: hidden; }
+        .viewport { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1E293B 0%, #0F172A 100%); position: relative; padding: 20px; overflow: hidden; }
+        .slide-stage {
+            width: 1280px; height: 720px; transform-origin: center center;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(254, 161, 22, 0.15);
+            border-radius: 20px; overflow: hidden; background: #FFFFFF;
+            border: 1.5px solid rgba(254, 161, 22, 0.4); position: relative;
+        }
+        .grid-view-container { display: none; width: 100%; height: 100%; overflow-y: auto; padding: 40px; background: #0F172A; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; align-content: start; }
+        .grid-view-container.active { display: grid; }
+        .grid-item { background: rgba(30, 41, 59, 0.9); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 14px; padding: 14px; cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; gap: 10px; color: #F8FAFC; }
+        .grid-item:hover { border-color: #FEA116; transform: translateY(-3px); }
+        .grid-item.active { border-color: #FEA116; box-shadow: 0 0 16px rgba(254, 161, 22, 0.4); }
+        .grid-preview-wrapper { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 8px; background: #1E293B; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .grid-label { color: #FEA116; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; }
+        .slide-container { align-items: flex-start; background-color: #FFFFFF; display: none; flex-direction: column; height: 100%; justify-content: flex-start; padding: 45px 55px; position: relative; width: 100%; color: #334155; }
+        .slide-container.active-slide { display: flex; }
+        .slide-container::before { content: ''; position: absolute; top: 0; right: 0; width: 450px; height: 450px; background: radial-gradient(circle at top right, rgba(254, 161, 22, 0.12) 0%, rgba(255, 255, 255, 0) 70%); pointer-events: none; z-index: 0; }
+        .slide-container > * { position: relative; z-index: 1; }
+        .slide-number { position: absolute; bottom: 20px; right: 30px; font-size: 13px; font-weight: 700; color: #64748B; }
+        .slide-footer-tag { position: absolute; bottom: 20px; left: 30px; font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 1px; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; color: #0F172B; }
+        .slide-title { font-size: 28px; font-weight: 700; color: #0F172B; margin-bottom: 20px; width: 100%; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .slide-title .category-tag { font-size: 11.5px; font-weight: 700; color: #9A6500; background: #FFF4E5; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; border: 1px solid #FFE2B3; }
+        p, li, td, th { font-size: 14px; line-height: 1.5; color: #334155; }
+        p { margin-bottom: 12px; }
+        .content-area { align-items: center; display: flex; flex-direction: column; flex-grow: 1; justify-content: center; width: 100%; }
+        .title-slide-bg { background: linear-gradient(135deg, #0F172B 0%, #1E293B 50%, #0F172B 100%); justify-content: center; align-items: center; text-align: center; padding: 80px; }
+        .title-slide-bg h1 { color: #FFFFFF; font-size: 48px; font-weight: 800; line-height: 1.15; margin-bottom: 18px; }
+        .title-slide-bg h1 span { color: #FEA116; }
+        .title-slide-bg .subtitle { color: #CBD5E1; font-size: 18px; max-width: 850px; margin: 0 auto 30px auto; font-weight: 300; }
+        .title-slide-bg .meta-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(254, 161, 22, 0.15); border: 1.5px solid rgba(254, 161, 22, 0.4); color: #FEA116; padding: 8px 22px; border-radius: 30px; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .section-title-layout { background: linear-gradient(135deg, #0F172B 0%, #1E293B 100%); justify-content: center; align-items: center; text-align: center; width: 100%; }
+        .section-title-layout h2 { color: #FFFFFF; font-size: 42px; font-weight: 700; margin-bottom: 15px; }
+        .section-title-layout p { color: #CBD5E1; font-size: 17px; max-width: 780px; }
+        .section-title-layout hr { background-color: #FEA116; border: none; height: 4px; margin: 20px auto; width: 80px; border-radius: 2px; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: 100%; align-items: stretch; }
+        .two-column.tiled > div { background-color: #F8FAFC; border-radius: 16px; border: 1.5px solid #E2E8F0; padding: 24px; display: flex; flex-direction: column; justify-content: flex-start; }
+        .two-column.tiled h3 { color: #0F172B; font-size: 19px; margin-bottom: 10px; }
+        .tiled-content { display: flex; gap: 20px; width: 100%; }
+        .tile { background-color: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 16px; flex: 1; padding: 22px 18px; text-align: left; display: flex; flex-direction: column; }
+        .tile .icon { background: #FFF4E5; color: #D97706; border: 1px solid #FFE2B3; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
+        .tile h3 { font-size: 17px; margin-bottom: 8px; color: #0F172B; }
+        .highlight-numbers-layout { display: grid; grid-template-columns: 38% 62%; gap: 30px; align-items: center; width: 100%; }
+        .highlight-numbers-layout .number-box { background: linear-gradient(135deg, #0F172B 0%, #1E293B 100%); border: 1.5px solid #FEA116; border-radius: 20px; padding: 28px; text-align: center; color: white; }
+        .highlight-numbers-layout .number { color: #FEA116; font-size: 60px; font-weight: 800; font-family: 'Outfit', sans-serif; line-height: 1; }
+        .highlight-numbers-layout .number-label { color: #E2E8F0; font-size: 14px; font-weight: 600; margin-top: 8px; }
+        .code-block { background: #0F172A; color: #CBD5E1; font-family: 'JetBrains Mono', monospace; padding: 14px 18px; border-radius: 12px; font-size: 12px; line-height: 1.5; border: 1px solid rgba(255, 255, 255, 0.15); width: 100%; overflow-x: auto; }
+        .styled-bullets ul { list-style: none; }
+        .styled-bullets li { position: relative; padding-left: 28px; margin-bottom: 12px; font-size: 14px; color: #334155; }
+        .styled-bullets li i { position: absolute; left: 0; top: 3px; color: #FEA116; font-size: 15px; }
+        .table-layout { width: 100%; border-radius: 12px; overflow: hidden; border: 1.5px solid #CBD5E1; }
+        .table-layout table { border-collapse: collapse; width: 100%; }
+        .table-layout th { background-color: #0F172B; color: #FEA116; font-size: 13.5px; font-weight: 700; padding: 10px 14px; text-align: left; }
+        .table-layout td { border-bottom: 1px solid #E2E8F0; padding: 9px 14px; font-size: 13px; background-color: #FFFFFF; color: #334155; }
+        .table-layout tr:nth-child(even) td { background-color: #F8FAFC; }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); color: #FEA116; border: 1.5px solid rgba(254, 161, 22, 0.4); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; z-index: 10; transition: all 0.2s ease; }
+        .nav-btn:hover { background: #FEA116; color: #0F172B; scale: 1.08; }
+        .nav-btn.prev { left: 25px; } .nav-btn.next { right: 25px; }
+        .bottom-tray { height: 110px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-top: 1.5px solid rgba(254, 161, 22, 0.3); display: flex; align-items: center; padding: 10px 20px; gap: 15px; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #FEA116 #1E293B; }
+        .thumb-item { min-width: 140px; height: 80px; background: #1E293B; border-radius: 8px; border: 1.5px solid rgba(255, 255, 255, 0.1); cursor: pointer; position: relative; overflow: hidden; flex-shrink: 0; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; }
+        .thumb-item:hover { border-color: #FEA116; transform: translateY(-2px); }
+        .thumb-item.active { border-color: #FEA116; box-shadow: 0 0 12px rgba(254, 161, 22, 0.6); }
+        .thumb-number { position: absolute; top: 4px; left: 6px; background: #FEA116; color: #0F172B; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; z-index: 2; }
+        .thumb-preview-text { font-size: 8.5px; font-weight: 600; color: #E2E8F0; padding: 12px 8px; text-align: center; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+        body.present-mode .canva-header, body.present-mode .bottom-tray { display: none !important; }
+        body.present-mode .viewport { padding: 0; background: #000000; }
+        body.present-mode .slide-stage { box-shadow: none; border-radius: 0; border: none; }
+    </style>
+</head>
+<body>
+    <header class="canva-header">
+        <div class="left-section">
+            <div class="canva-logo"><i class="fa-solid fa-hotel"></i> LuxuryStay & Keto HMS | User & Staff Operations Manual (30 Slides)</div>
+            <div class="deck-title">LuxuryStay & Keto HMS | User & Staff Operations Manual (30 Slides) (30 Slides)</div>
+        </div>
+        <div class="right-section">
+            <a href="documentation_50_slides.html" class="btn-canva "><i class="fa-solid fa-sitemap"></i> Architecture (50p)</a>
+            <a href="developer_guide_30_slides.html" class="btn-canva "><i class="fa-solid fa-code"></i> Developer (30p)</a>
+            <a href="user_guide_30_slides.html" class="btn-canva primary"><i class="fa-solid fa-users"></i> User Guide (30p)</a>
+            <button class="btn-canva" id="toggleGridViewBtn"><i class="fa-solid fa-border-all"></i> Grid View</button>
+            <button class="btn-canva" id="zoomOutBtn"><i class="fa-solid fa-minus"></i></button>
+            <span id="zoomPercent" style="font-size: 13px; font-weight: 700; color: #FEA116;">100%</span>
+            <button class="btn-canva" id="zoomInBtn"><i class="fa-solid fa-plus"></i></button>
+            <button class="btn-canva primary" id="presentBtn"><i class="fa-solid fa-play"></i> Present</button>
+        </div>
+    </header>
+    <main class="workspace">
+        <div class="viewport" id="viewport">
+            <button class="nav-btn prev" id="prevSlideBtn" title="Previous Slide (←)"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="slide-stage" id="slideStage">
+                
+                <!-- SLIDE 1 -->
+                <div class="slide-container title-slide-bg active-slide" id="slide1">
+                    <div class="meta-badge"><i class="fa-solid fa-layer-group"></i> User & Staff Operations Guide</div>
+                    <h1>LuxuryStay & Keto HMS <span>User & Staff Operations Manual</span></h1>
+                    <p class="subtitle">30-Slide Comprehensive Operations Guide: Guest Online Booking Flow, Front Desk Check-in/out, Admin Management, Housekeeping Workflows & Invoicing</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 1 of 30</div>
+                </div>
+                <!-- SLIDE 2 -->
+                <div class="slide-container" id="slide2">
+                    <div class="slide-title">Multi-Role System Personas <span class="category-tag">Roles</span></div>
+                    <div class="content-area">
+                        <div class="tiled-content"><div class="tile"><div class="icon"><i class="fa-solid fa-user-tie"></i></div><h3>1. Hotel Admin</h3><p>Complete control over room pricing, user permissions, analytics, and revenue folios.</p></div><div class="tile"><div class="icon"><i class="fa-solid fa-bell-concierge"></i></div><h3>2. Receptionist</h3><p>Guest check-in/out operations, live room allocation, and instant invoice printing.</p></div><div class="tile"><div class="icon"><i class="fa-solid fa-broom"></i></div><h3>3. Housekeeping</h3><p>Room cleaning schedules, dirty-to-clean status updates, and maintenance flags.</p></div><div class="tile"><div class="icon"><i class="fa-solid fa-user"></i></div><h3>4. Hotel Guest</h3><p>Online room browsing, date selection, instant bookings, and service feedback.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 2 of 30</div>
+                </div>
+                <!-- SLIDE 3 -->
+                <div class="slide-container section-title-layout" id="slide3">
+                    <hr>
+                    <h2>Section 1: Guest Reservation & Online Experience</h2>
+                    <p>Browsing Rooms, Selecting Dates, Booking Confirmation, and Concierge Support</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 3 of 30</div>
+                </div>
+                <!-- SLIDE 4 -->
+                <div class="slide-container" id="slide4">
+                    <div class="slide-title">Guest Guide: Step 1 - Browse & Select Rooms <span class="category-tag">Guest Guide</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-globe" style="color:#059669; margin-right:8px;"></i> Visit Home Page</h3><p>Navigate to <code>index.html</code> or <code>room.html</code> to view high-res photos, nightly pricing, and luxury amenities.</p></div><div><h3><i class="fa-solid fa-calendar-alt" style="color:#059669; margin-right:8px;"></i> Use Quick Booking Bar</h3><p>Select Arrival & Departure dates, number of guests, and click <strong>"Check Now"</strong> to filter available suites.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 4 of 30</div>
+                </div>
+                <!-- SLIDE 5 -->
+                <div class="slide-container" id="slide5">
+                    <div class="slide-title">Guest Guide: Step 2 - Complete Online Reservation <span class="category-tag">Booking Form</span></div>
+                    <div class="content-area">
+                        <div class="styled-bullets"><ul><li><i class="fa-solid fa-check-circle"></i> <strong>Fill Guest Details:</strong> Enter full name, email address, phone number, and special requests.</li><li><i class="fa-solid fa-calculator"></i> <strong>Automatic Price Calculation:</strong> The system computes duration in nights and displays tax breakdown.</li><li><i class="fa-solid fa-file-invoice"></i> <strong>Instant Confirmation:</strong> Receive an instant on-screen booking ID and invoice reference.</li></ul></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 5 of 30</div>
+                </div>
+                <!-- SLIDE 6 -->
+                <div class="slide-container" id="slide6">
+                    <div class="slide-title">Guest Guide: Step 3 - Special Requests & Concierge <span class="category-tag">Guest Services</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-champagne-glasses" style="color:#059669; margin-right:8px;"></i> In-Room Amenities</h3><p>Guests can request airport pickups, extra rollaway beds, or celebratory champagne during booking.</p></div><div><h3><i class="fa-solid fa-headset" style="color:#059669; margin-right:8px;"></i> 24/7 Digital Concierge</h3><p>Submit inquiries anytime through the interactive Contact form on <code>contact.html</code>.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 6 of 30</div>
+                </div>
+                <!-- SLIDE 7 -->
+                <div class="slide-container" id="slide7">
+                    <div class="slide-title">Guest Guide: Step 4 - Viewing & Printing Folio <span class="category-tag">Guest Invoices</span></div>
+                    <div class="content-area">
+                        <div class="styled-bullets"><ul><li><i class="fa-solid fa-receipt"></i> <strong>Booking Reference:</strong> Keep the 6-digit confirmation code for front desk check-in.</li><li><i class="fa-solid fa-print"></i> <strong>Printable Receipt:</strong> Instant printable folio with breakdown of base room rate and municipal tax.</li></ul></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 7 of 30</div>
+                </div>
+                <!-- SLIDE 8 -->
+                <div class="slide-container section-title-layout" id="slide8">
+                    <hr>
+                    <h2>Section 2: Front Desk Receptionist Operations</h2>
+                    <p>Check-in, Room Key Issuance, Incidentals, and Check-out Settlement</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 8 of 30</div>
+                </div>
+                <!-- SLIDE 9 -->
+                <div class="slide-container" id="slide9">
+                    <div class="slide-title">Staff Portal: Quick Role Switcher Bar <span class="category-tag">Dashboard</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-key" style="color:#059669; margin-right:8px;"></i> 1-Click Role Testing</h3><p>The top role switcher bar in <code>dashboard.html</code> allows instant auto-login as Admin, Manager, Receptionist, or Housekeeper.</p></div><div><h3><i class="fa-solid fa-id-badge" style="color:#059669; margin-right:8px;"></i> Active Session Badge</h3><p>The top right corner displays the active staff user name, role pill, and avatar.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 9 of 30</div>
+                </div>
+                <!-- SLIDE 10 -->
+                <div class="slide-container" id="slide10">
+                    <div class="slide-title">Receptionist Workflow: Guest Check-in Procedure <span class="category-tag">Check-in</span></div>
+                    <div class="content-area">
+                        <div class="styled-bullets"><ul><li><i class="fa-solid fa-user-check"></i> <strong>1. Locate Reservation:</strong> Search by guest name or booking ID in the Reservations tab.</li><li><i class="fa-solid fa-door-open"></i> <strong>2. Assign Clean Room:</strong> Verify room status is <code>available</code> on the Room Inventory grid.</li><li><i class="fa-solid fa-key"></i> <strong>3. Click Check-in:</strong> Switches room status to <code>occupied</code> and logs arrival timestamp.</li></ul></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 10 of 30</div>
+                </div>
+                <!-- SLIDE 11 -->
+                <div class="slide-container" id="slide11">
+                    <div class="slide-title">Receptionist Workflow: Adding Incidental Charges <span class="category-tag">Incidentals</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-utensils" style="color:#059669; margin-right:8px;"></i> Room Dining Charges</h3><p>Post dining charges directly to the active guest folio with description and amount.</p></div><div><h3><i class="fa-solid fa-spa" style="color:#059669; margin-right:8px;"></i> Spa & Valet Services</h3><p>Add custom line items with automatic recalculation of the outstanding invoice balance.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 11 of 30</div>
+                </div>
+                <!-- SLIDE 12 -->
+                <div class="slide-container" id="slide12">
+                    <div class="slide-title">Receptionist Workflow: Guest Check-Out & Settlement <span class="category-tag">Check-out</span></div>
+                    <div class="content-area">
+                        <div class="table-layout"><table><thead><tr><th>Action</th><th>Trigger</th><th>System Result</th></tr></thead><tbody><tr><td><strong>Review Folio</strong></td><td>Click "View Invoice"</td><td>Displays itemized room charges, services, and taxes.</td></tr><tr><td><strong>Collect Payment</strong></td><td>Select Cash / Card / Online</td><td>Marks invoice status as <code>paid</code>.</td></tr><tr><td><strong>Release Room</strong></td><td>Click "Complete Checkout"</td><td>Switches room status to <code>cleaning</code> and notifies housekeeping.</td></tr></tbody></table></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 12 of 30</div>
+                </div>
+                <!-- SLIDE 13 -->
+                <div class="slide-container section-title-layout" id="slide13">
+                    <hr>
+                    <h2>Section 3: Housekeeping & Maintenance Management</h2>
+                    <p>Task Queues, Cleaning Status Lifecycles, and Maintenance Issue Tracking</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 13 of 30</div>
+                </div>
+                <!-- SLIDE 14 -->
+                <div class="slide-container" id="slide14">
+                    <div class="slide-title">Housekeeping Workflow: Task Roster & Dirty Room Alerts <span class="category-tag">Housekeeping</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-bell" style="color:#059669; margin-right:8px;"></i> Automated Cleaning Queue</h3><p>Whenever a guest checks out, the room is automatically added to the Housekeeping dashboard queue.</p></div><div><h3><i class="fa-solid fa-clipboard-user" style="color:#059669; margin-right:8px;"></i> Priority Assignment</h3><p>Tasks can be marked <code>urgent</code> for rooms with pending arrival guests.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 14 of 30</div>
+                </div>
+                <!-- SLIDE 15 -->
+                <div class="slide-container" id="slide15">
+                    <div class="slide-title">Room Status Lifecycle State Machine <span class="category-tag">State Machine</span></div>
+                    <div class="content-area">
+                        <div class="code-block">[Available] ----(Guest Books)----> [Booked]
+     ^                                 |
+     |                           (Check-in)
+(Mark Clean)                           |
+     |                                 v
+[Cleaning] <----(Check-out)----- [Occupied]
+     ^
+     |
+(Maintenance Resolved) <---- [Maintenance]</div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 15 of 30</div>
+                </div>
+                <!-- SLIDE 16 -->
+                <div class="slide-container" id="slide16">
+                    <div class="slide-title">Housekeeping: Marking Room Clean & Available <span class="category-tag">Cleanliness</span></div>
+                    <div class="content-area">
+                        <div class="styled-bullets"><ul><li><i class="fa-solid fa-soap"></i> <strong>Step 1:</strong> Housekeeper completes room sanitation and restocks amenities.</li><li><i class="fa-solid fa-mobile-screen"></i> <strong>Step 2:</strong> In the Staff Portal, click <strong>"Mark Clean"</strong> on the room card.</li><li><i class="fa-solid fa-circle-check"></i> <strong>Step 3:</strong> Room status updates to <code>available</code>, instantly unblocking public booking.</li></ul></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 16 of 30</div>
+                </div>
+                <!-- SLIDE 17 -->
+                <div class="slide-container" id="slide17">
+                    <div class="slide-title">Logging Maintenance & Repair Tickets <span class="category-tag">Maintenance</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-wrench" style="color:#059669; margin-right:8px;"></i> Report Issue</h3><p>Select Room number, category (plumbing, electrical, AC), and enter a brief description.</p></div><div><h3><i class="fa-solid fa-lock" style="color:#059669; margin-right:8px;"></i> Room Lockout</h3><p>Room is flagged as <code>maintenance</code> to prevent bookings until technicians sign off.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 17 of 30</div>
+                </div>
+                <!-- SLIDE 18 -->
+                <div class="slide-container section-title-layout" id="slide18">
+                    <hr>
+                    <h2>Section 4: Hotel Manager & Admin Operations</h2>
+                    <p>Inventory Control, Rate Customization, Staff Provisioning, and Audits</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 18 of 30</div>
+                </div>
+                <!-- SLIDE 19 -->
+                <div class="slide-container" id="slide19">
+                    <div class="slide-title">Admin: Executive Overview & Occupancy Gauges <span class="category-tag">Admin Dashboard</span></div>
+                    <div class="content-area">
+                        <div class="tiled-content"><div class="tile"><div class="icon"><i class="fa-solid fa-hotel"></i></div><h3>Occupancy Gauge</h3><p>Percentage of total rooms occupied vs available in real time.</p></div><div class="tile"><div class="icon"><i class="fa-solid fa-money-bill-wave"></i></div><h3>Revenue Tracker</h3><p>Daily and monthly billing totals across all room categories.</p></div><div class="tile"><div class="icon"><i class="fa-solid fa-users"></i></div><h3>Staff Roster</h3><p>Active staff on duty across reception, housekeeping, and management.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 19 of 30</div>
+                </div>
+                <!-- SLIDE 20 -->
+                <div class="slide-container" id="slide20">
+                    <div class="slide-title">Admin: Room Inventory & Dynamic Pricing Rates <span class="category-tag">Rate Management</span></div>
+                    <div class="content-area">
+                        <div class="table-layout"><table><thead><tr><th>Room Type</th><th>Default Rate</th><th>Peak / Weekend Rate</th><th>Max Occupancy</th></tr></thead><tbody><tr><td>Junior Suite</td><td>$149 / Night</td><td>$189 / Night</td><td>2 Guests</td></tr><tr><td>Executive Suite</td><td>$249 / Night</td><td>$299 / Night</td><td>2 Guests</td></tr><tr><td>Super Deluxe Suite</td><td>$399 / Night</td><td>$459 / Night</td><td>4 Guests</td></tr><tr><td>Presidential Suite</td><td>$499 / Night</td><td>$599 / Night</td><td>4 Guests</td></tr></tbody></table></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 20 of 30</div>
+                </div>
+                <!-- SLIDE 21 -->
+                <div class="slide-container" id="slide21">
+                    <div class="slide-title">Admin: Staff Provisioning & Role Permissions <span class="category-tag">Staff Admin</span></div>
+                    <div class="content-area">
+                        <div class="styled-bullets"><ul><li><i class="fa-solid fa-user-plus"></i> <strong>Add New Staff:</strong> Create employee credentials with designated role enum.</li><li><i class="fa-solid fa-shield-halved"></i> <strong>Role Enforcement:</strong> System blocks unauthorized access based on role permissions.</li><li><i class="fa-solid fa-user-xmark"></i> <strong>Deactivate Accounts:</strong> Instantly revoke access upon employee departure.</li></ul></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 21 of 30</div>
+                </div>
+                <!-- SLIDE 22 -->
+                <div class="slide-container" id="slide22">
+                    <div class="slide-title">Admin: Financial Audits & Invoice Reports <span class="category-tag">Financials</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-file-invoice-dollar" style="color:#059669; margin-right:8px;"></i> Folio Settlement Logs</h3><p>Audit settled payments, split payments, and refunds across any selected date range.</p></div><div><h3><i class="fa-solid fa-scale-balanced" style="color:#059669; margin-right:8px;"></i> Tax & Surcharge Summaries</h3><p>Export calculated municipal hospitality taxes for state compliance reporting.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 22 of 30</div>
+                </div>
+                <!-- SLIDE 23 -->
+                <div class="slide-container" id="slide23">
+                    <div class="slide-title">Admin: Guest Review Moderation & Analytics <span class="category-tag">Reviews</span></div>
+                    <div class="content-area">
+                        <div class="table-layout"><table><thead><tr><th>Category</th><th>Average Rating</th><th>Guest Sentiment</th><th>Action Item</th></tr></thead><tbody><tr><td>Room Cleanliness</td><td>4.9 / 5.0</td><td>Outstanding</td><td>Maintain current SOPs</td></tr><tr><td>Dining & Room Service</td><td>4.8 / 5.0</td><td>Very Positive</td><td>Expand late night menu</td></tr><tr><td>Check-in Speed</td><td>4.9 / 5.0</td><td>Fast & Seamless</td><td>Front desk recognized</td></tr></tbody></table></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 23 of 30</div>
+                </div>
+                <!-- SLIDE 24 -->
+                <div class="slide-container section-title-layout" id="slide24">
+                    <hr>
+                    <h2>Section 5: Troubleshooting & Frequently Asked Questions</h2>
+                    <p>Common Operational Scenarios, System Tips, and Emergency Procedures</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 24 of 30</div>
+                </div>
+                <!-- SLIDE 25 -->
+                <div class="slide-container" id="slide25">
+                    <div class="slide-title">FAQ: Double Booking Conflict Resolution <span class="category-tag">FAQ</span></div>
+                    <div class="content-area">
+                        <div class="two-column tiled"><div><h3><i class="fa-solid fa-shield-heart" style="color:#059669; margin-right:8px;"></i> How does the system prevent double booking?</h3><p>The reservation engine automatically queries existing bookings for overlapping date ranges. Conflicting dates are rejected with HTTP 400.</p></div><div><h3><i class="fa-solid fa-arrows-split-up-and-left" style="color:#059669; margin-right:8px;"></i> Can Front Desk reassign rooms?</h3><p>Yes. Receptionists can reassign a guest to an upgraded room category with one click in the dashboard.</p></div></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 25 of 30</div>
+                </div>
+                <!-- SLIDE 26 -->
+                <div class="slide-container" id="slide26">
+                    <div class="slide-title">FAQ: Offline Database Resilience <span class="category-tag">Resilience</span></div>
+                    <div class="content-area">
+                        <div class="styled-bullets"><ul><li><i class="fa-solid fa-wifi"></i> <strong>Static Frontend Cache:</strong> Public website pages load smoothly even during brief database reconnects.</li><li><i class="fa-solid fa-rotate"></i> <strong>Auto-Reconnect:</strong> Mongoose automatically retries database connection every 5 seconds.</li><li><i class="fa-solid fa-database"></i> <strong>Header Status Badge:</strong> Real-time indicator notifies staff when database is synchronized.</li></ul></div>
+                    </div>
+                    <div class="slide-footer-tag">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number">Slide 26 of 30</div>
+                </div>
+                <!-- SLIDE 27 -->
+                <div class="slide-container title-slide-bg" id="slide27">
+                    <div class="meta-badge"><i class="fa-solid fa-layer-group"></i> User Operations Manual Complete</div>
+                    <h1>LuxuryStay & Keto <span>User & Staff Manual Sign-off</span></h1>
+                    <p class="subtitle">Complete 30-Slide Standard Operating Procedures (SOP) & User Manual for LuxuryStay Hospitality Management System.</p>
+                    <div class="slide-footer-tag" style="color:#FEA116;">LuxuryStay & Keto HMS</div>
+                    <div class="slide-number" style="color:#CBD5E1;">Slide 27 of 30</div>
+                </div>
+            </div>
+            <div class="grid-view-container" id="gridViewContainer"></div>
+            <button class="nav-btn next" id="nextSlideBtn" title="Next Slide (→)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </main>
+    <footer class="bottom-tray" id="bottomTray"></footer>
+    <script>
+        const totalSlides = 30;
+        let currentSlide = 1;
+        let currentScale = 1;
+        const slides = document.querySelectorAll('.slide-container');
+        const slideStage = document.getElementById('slideStage');
+        const viewport = document.getElementById('viewport');
+        const bottomTray = document.getElementById('bottomTray');
+        const gridViewContainer = document.getElementById('gridViewContainer');
+        const zoomPercent = document.getElementById('zoomPercent');
+
+        function autoScaleStage() {
+            if (document.body.classList.contains('present-mode')) {
+                const scaleX = window.innerWidth / 1280;
+                const scaleY = window.innerHeight / 720;
+                const scale = Math.min(scaleX, scaleY);
+                slideStage.style.transform = `scale(${scale})`;
+                return;
+            }
+            const availWidth = viewport.clientWidth - 100;
+            const availHeight = viewport.clientHeight - 80;
+            const fitScale = Math.min(availWidth / 1280, availHeight / 720);
+            currentScale = fitScale;
+            applyScale();
+        }
+
+        function applyScale() {
+            slideStage.style.transform = `scale(${currentScale})`;
+            zoomPercent.innerText = `${Math.round(currentScale * 100)}%`;
+        }
+
+        function generateThumbnails() {
+            slides.forEach((slide, index) => {
+                const slideNum = index + 1;
+                const titleText = slide.querySelector('.slide-title')?.innerText || slide.querySelector('h1')?.innerText || slide.querySelector('h2')?.innerText || `Slide ${slideNum}`;
+                const thumb = document.createElement('div');
+                thumb.className = `thumb-item ${slideNum === 1 ? 'active' : ''}`;
+                thumb.dataset.slide = slideNum;
+                thumb.innerHTML = `
+                    <div class="thumb-number">${slideNum}</div>
+                    <div class="thumb-preview-text">${titleText.substring(0, 35)}</div>
+                `;
+                thumb.addEventListener('click', () => goToSlide(slideNum));
+                bottomTray.appendChild(thumb);
+
+                const gridItem = document.createElement('div');
+                gridItem.className = `grid-item ${slideNum === 1 ? 'active' : ''}`;
+                gridItem.dataset.slide = slideNum;
+                gridItem.innerHTML = `
+                    <div class="grid-label">
+                        <span>Slide ${slideNum}</span>
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div class="grid-preview-wrapper">
+                        <div style="font-size:11px; padding:12px; color:#FEA116; font-weight:600;">
+                            ${titleText}
+                        </div>
+                    </div>
+                `;
+                gridItem.addEventListener('click', () => {
+                    goToSlide(slideNum);
+                    toggleGridView(false);
+                });
+                gridViewContainer.appendChild(gridItem);
+            });
+        }
+
+        function goToSlide(slideNum) {
+            if (slideNum < 1 || slideNum > totalSlides) return;
+            slides.forEach((s, idx) => { s.classList.toggle('active-slide', idx + 1 === slideNum); });
+            document.querySelectorAll('.thumb-item').forEach((t, idx) => {
+                t.classList.toggle('active', idx + 1 === slideNum);
+                if (idx + 1 === slideNum) { t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }
+            });
+            document.querySelectorAll('.grid-item').forEach((g, idx) => { g.classList.toggle('active', idx + 1 === slideNum); });
+            currentSlide = slideNum;
+        }
+
+        function toggleGridView(forceState) {
+            const isGrid = forceState !== undefined ? forceState : gridViewContainer.style.display !== 'grid';
+            if (isGrid) { gridViewContainer.style.display = 'grid'; slideStage.style.display = 'none'; }
+            else { gridViewContainer.style.display = 'none'; slideStage.style.display = 'block'; }
+        }
+
+        document.getElementById('prevSlideBtn').addEventListener('click', () => goToSlide(currentSlide - 1));
+        document.getElementById('nextSlideBtn').addEventListener('click', () => goToSlide(currentSlide + 1));
+        document.getElementById('zoomInBtn').addEventListener('click', () => { currentScale += 0.1; applyScale(); });
+        document.getElementById('zoomOutBtn').addEventListener('click', () => { currentScale = Math.max(0.3, currentScale - 0.1); applyScale(); });
+        document.getElementById('toggleGridViewBtn').addEventListener('click', () => toggleGridView());
+        document.getElementById('presentBtn').addEventListener('click', () => {
+            document.body.classList.add('present-mode');
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => console.warn(err));
+            }
+            autoScaleStage();
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) { document.body.classList.remove('present-mode'); autoScaleStage(); }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') { goToSlide(currentSlide + 1); }
+            else if (e.key === 'ArrowLeft') { goToSlide(currentSlide - 1); }
+            else if (e.key === 'Escape') { toggleGridView(false); if (document.body.classList.contains('present-mode')) { document.body.classList.remove('present-mode'); autoScaleStage(); } }
+        });
+
+        window.addEventListener('resize', autoScaleStage);
+        generateThumbnails();
+        autoScaleStage();
+    </script>
+</body>
+</html>

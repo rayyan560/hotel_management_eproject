@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Our Rooms - Keto Luxury Suites</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Keto Hotel Rooms, Luxury Suites, Presidential Suite" name="keywords">
+    <meta content="Browse our luxury suites, deluxe king bedrooms, and executive rooms with live MongoDB availability." name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">  
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Theme & Animation Stylesheet -->
+    <link href="css/animations.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body class="main-layout inner_page">
+    <div class="container-xxl bg-white p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3.5rem; height: 3.5rem;" role="status">
+                <span class="sr-only">Loading Rooms...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Header Start -->
+        <div class="container-fluid bg-dark px-0 sticky-top">
+            <div class="row gx-0">
+                <div class="col-lg-3 bg-dark d-none d-lg-block">
+                    <a href="index.html" class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                        <h1 class="m-0 text-primary text-uppercase" style="letter-spacing: 2px;">
+                            <i class="fa fa-hotel me-2"></i>Keto
+                        </h1>
+                    </a>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row gx-0 bg-white d-none d-lg-flex">
+                        <div class="col-lg-7 px-5 text-start">
+                            <div class="h-100 d-inline-flex align-items-center py-2 me-3" id="mongo-topbar-status">
+                                <span class="badge bg-success" style="font-size: 11px;"><i class="fa fa-database me-1"></i> Live Room Engine</span>
+                            </div>
+                            <div class="h-100 d-inline-flex align-items-center py-2 me-4 text-muted">
+                                <i class="fa fa-envelope text-primary me-2"></i>
+                                <span style="font-size: 14px;">reservations@ketohotel.com</span>
+                            </div>
+                            <div class="h-100 d-inline-flex align-items-center py-2 text-muted">
+                                <i class="fa fa-phone-alt text-primary me-2"></i>
+                                <span style="font-size: 14px;">+01 1234569540</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 px-5 text-end">
+                            <div class="d-inline-flex align-items-center py-2">
+                                <a class="me-3 text-dark" href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a class="me-3 text-dark" href="#"><i class="fab fa-twitter"></i></a>
+                                <a class="me-3 text-dark" href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a class="text-dark" href="#"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
+                        <a href="index.html" class="navbar-brand d-block d-lg-none">
+                            <h1 class="m-0 text-primary text-uppercase"><i class="fa fa-hotel me-2"></i>Keto</h1>
+                        </a>
+                        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <div class="navbar-nav mr-auto py-0">
+                                <a href="index.html" class="nav-item nav-link">Home</a>
+                                <a href="about.html" class="nav-item nav-link">About</a>
+                                <a href="room.html" class="nav-item nav-link active">Our Room</a>
+                                <a href="gallery.html" class="nav-item nav-link">Gallery</a>
+                                <a href="blog.html" class="nav-item nav-link">Blog</a>
+                                <a href="contact.html" class="nav-item nav-link">Contact Us</a>
+                                <a href="/dashboard" class="nav-item nav-link text-warning d-lg-none"><i class="fa fa-user-shield me-1"></i>Staff Portal</a>
+                            </div>
+                            <a href="/dashboard" class="btn btn-primary rounded-0 py-4 px-md-5 d-none d-lg-block hover-lift">
+                                <i class="fa fa-user-shield me-2"></i>Staff Portal <i class="fa fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Header End -->
+
+        <!-- Page Header Start -->
+        <div class="container-fluid page-header mb-5 p-0" style="background-image: url(img/carousel-1.jpg);">
+            <div class="container-fluid page-header-inner py-5">
+                <div class="container text-center pb-5">
+                    <h1 class="display-3 text-white mb-3 animated slideInDown">Our Luxury Rooms</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center text-uppercase">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Our Room</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Page Header End -->
+
+        <!-- Our Room Catalog Start -->
+        <div class="our_room py-5">
+            <div class="container">
+                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                    <h6 class="section-title text-center text-primary text-uppercase">Accommodations</h6>
+                    <h1 class="mb-5">Select Your <span class="text-primary text-uppercase">Dream Room</span></h1>
+                </div>
+
+                <!-- Dynamic Rooms List synced with Backend API & Mongo -->
+                <div class="row g-4" id="dynamic-rooms-list">
+                    <!-- Standard Room 1 -->
+                    <div class="col-lg-4 col-md-6 wow fadeInUp hover-lift" data-wow-delay="0.1s">
+                        <div class="room-item shadow rounded overflow-hidden bg-white h-100 d-flex flex-column">
+                            <div class="position-relative hover-zoom-img">
+                                <img class="img-fluid w-100" src="img/room-1.jpg" alt="Junior Suite" style="height: 240px; object-fit: cover;">
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4 fw-bold">
+                                    $149 / Night
+                                </small>
+                            </div>
+                            <div class="p-4 mt-2 d-flex flex-column flex-grow-1">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5 class="mb-0 fw-bold">Junior Suite</h5>
+                                    <div class="ps-2 text-warning">
+                                        <small class="fa fa-star"></small><small class="fa fa-star"></small><small class="fa fa-star"></small><small class="fa fa-star"></small><small class="fa fa-star"></small>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-3 text-muted" style="font-size: 13px;">
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>1 King Bed</small>
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>1 Bath</small>
+                                    <small><i class="fa fa-wifi text-primary me-2"></i>Free Wifi</small>
+                                </div>
+                                <p class="text-muted mb-3 flex-grow-1" style="font-size: 14px;">
+                                    Modern minimalist interior with garden view, high-speed fiber internet, and complimentary breakfast.
+                                </p>
+                                <div class="d-flex justify-content-between pt-2 border-top">
+                                    <a class="btn btn-sm btn-dark rounded py-2 px-3" href="booking.html?roomType=Junior%20Suite">Details</a>
+                                    <a class="btn btn-sm btn-primary rounded py-2 px-4 fw-bold" href="booking.html?roomType=Junior%20Suite">Book Now <i class="fa fa-chevron-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Standard Room 2 -->
+                    <div class="col-lg-4 col-md-6 wow fadeInUp hover-lift" data-wow-delay="0.2s">
+                        <div class="room-item shadow rounded overflow-hidden bg-white h-100 d-flex flex-column">
+                            <div class="position-relative hover-zoom-img">
+                                <img class="img-fluid w-100" src="img/room-2.jpg" alt="Executive Suite" style="height: 240px; object-fit: cover;">
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4 fw-bold">
+                                    $249 / Night
+                                </small>
+                            </div>
+                            <div class="p-4 mt-2 d-flex flex-column flex-grow-1">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5 class="mb-0 fw-bold">Executive Suite</h5>
+                                    <div class="ps-2 text-warning">
+                                        <small class="fa fa-star"></small><small class="fa fa-star"></small><small class="fa fa-star"></small><small class="fa fa-star"></small><small class="fa fa-star"></small>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-3 text-muted" style="font-size: 13px;">
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>2 Beds</small>
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>2 Baths</small>
+                                    <small><i class="fa fa-tv text-primary me-2"></i>Smart TV</small>
+                                </div>
+                                <p class="text-muted mb-3 flex-grow-1" style="font-size: 14px;">
+                                    Expansive suite with city skyline view, dedicated work desk, espresso bar, and marble bath.
+                                </p>
+                                <div class="d-flex justify-content-between pt-2 border-top">
+                                    <a class="btn btn-sm btn-dark rounded py-2 px-3" href="booking.html?roomType=Executive%20Suite">Details</a>
+                                    <a class="btn btn-sm btn-primary rounded py-2 px-4 fw-bold" href="booking.html?roomType=Executive%20Suite">Book Now <i class="fa fa-chevron-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Standard Room 3 -->
+                    <div class="col-lg-4 col-md-6 wow fadeInUp hover-lift" data-wow-delay="0.3s">
+                        <div class="room-item shadow rounded overflow-hidden bg-white h-100 d-flex flex-column">
+                            <div class="position-relative hover-zoom-img">
+                                <img class="img-fluid w-100" src="img/room-3.jpg" alt="Super Deluxe Suite" style="height: 240px; object-fit: cover;">
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4 fw-bold">
+                                    $399 / Night
+                                </small>
+                            </div>
+                            <div class="p-4 mt-2 d-flex flex-column flex-grow-1">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5 class="mb-0 fw-bold">Super Deluxe Suite</h5>
+                                    <div class="ps-2 text-warning">
+                                        <small class="fa fa-star"></small><small class="fa fa-star"></small><small class="fa fa-star"></small><small class="fa fa-star"></small><small class="fa fa-star"></small>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-3 text-muted" style="font-size: 13px;">
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3 Beds</small>
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>Jacuzzi</small>
+                                    <small><i class="fa fa-concierge-bell text-primary me-2"></i>VIP Butler</small>
+                                </div>
+                                <p class="text-muted mb-3 flex-grow-1" style="font-size: 14px;">
+                                    Presidential luxury with private rooftop terrace, heated jacuzzi, and 24/7 dedicated butler service.
+                                </p>
+                                <div class="d-flex justify-content-between pt-2 border-top">
+                                    <a class="btn btn-sm btn-dark rounded py-2 px-3" href="booking.html?roomType=Super%20Deluxe%20Suite">Details</a>
+                                    <a class="btn btn-sm btn-primary rounded py-2 px-4 fw-bold" href="booking.html?roomType=Super%20Deluxe%20Suite">Book Now <i class="fa fa-chevron-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Our Room Catalog End -->
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-light footer wow fadeIn" data-wow-delay="0.1s">
+            <div class="container pb-5">
+                <div class="row g-5">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="bg-primary rounded p-4 mb-4">
+                            <a href="index.html"><h2 class="text-white text-uppercase mb-3"><i class="fa fa-hotel me-2"></i>Keto</h2></a>
+                            <p class="text-white mb-0">Experience world-class luxury living with our comprehensive hospitality and multi-role reservation platform.</p>
+                        </div>
+                        <div id="mongo-footer-status"></div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h6 class="section-title text-start text-primary text-uppercase mb-4">Contact US</h6>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3 text-primary"></i>123 Luxury Avenue, Suite 500</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3 text-primary"></i>+01 1234569540</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3 text-primary"></i>demo@gmail.com</p>
+                    </div>
+                    <div class="col-lg-5 col-md-12">
+                        <div class="row gy-5 g-4">
+                            <div class="col-md-6">
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Menu Link</h6>
+                                <a class="btn btn-link" href="index.html">Home</a>
+                                <a class="btn btn-link" href="about.html">About</a>
+                                <a class="btn btn-link" href="room.html">Our Room</a>
+                                <a class="btn btn-link" href="gallery.html">Gallery</a>
+                                <a class="btn btn-link" href="blog.html">Blog</a>
+                                <a class="btn btn-link" href="contact.html">Contact Us</a>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Quick Booking</h6>
+                                <p class="text-muted mb-3" style="font-size: 14px;">Reserve instantly or contact our concierge for customized packages.</p>
+                                <a href="booking.html" class="btn btn-primary py-2 px-3 hover-lift"><i class="fa fa-calendar-check me-1"></i>Book Room</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom text-primary" href="#">Keto Luxury Hotel Management</a>, All Rights Reserved.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/hotelier-integration.js"></script>
+</body>
+
+</html>

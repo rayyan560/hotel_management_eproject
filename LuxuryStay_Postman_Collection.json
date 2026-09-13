@@ -1,0 +1,332 @@
+{
+  "info": {
+    "_postman_id": "luxurystay-hms-api-2026",
+    "name": "LUXURY 5 STAR HOTEL - Complete API Collection",
+    "description": "Enterprise Hotel Management System REST API Collection covering Auth, Rooms, Bookings, Billing, Housekeeping, Maintenance, Services, Feedback, and Analytics.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication & Users",
+      "item": [
+        {
+          "name": "Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@luxurystay.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Guest Registration",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jonathan Guest\",\n  \"email\": \"jonathan@example.com\",\n  \"password\": \"password123\",\n  \"phone\": \"+1 555-9988\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"] }
+          }
+        },
+        {
+          "name": "Get Current Profile (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          }
+        },
+        {
+          "name": "Get All Users (Admin/Manager)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/users", "host": ["{{baseUrl}}"], "path": ["api", "users"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Room Management",
+      "item": [
+        {
+          "name": "Get All Rooms",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/rooms", "host": ["{{baseUrl}}"], "path": ["api", "rooms"] }
+          }
+        },
+        {
+          "name": "Check Room Availability by Dates",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/check-availability?checkIn=2026-09-01&checkOut=2026-09-05",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "check-availability"],
+              "query": [
+                { "key": "checkIn", "value": "2026-09-01" },
+                { "key": "checkOut", "value": "2026-09-05" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Room (Admin/Manager)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"402\",\n  \"floor\": 4,\n  \"roomType\": \"Luxury Suite\",\n  \"pricePerNight\": 720,\n  \"maxOccupancy\": 4,\n  \"bedType\": \"King Size\",\n  \"amenities\": [\"WiFi\", \"Jacuzzi\", \"Smart TV\", \"Mini Bar\", \"Skyline View\"]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/rooms", "host": ["{{baseUrl}}"], "path": ["api", "rooms"] }
+          }
+        },
+        {
+          "name": "Update Room Status (Available / Occupied / Cleaning / Maintenance)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Available\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/rooms/:roomId/status", "host": ["{{baseUrl}}"], "path": ["api", "rooms", ":roomId", "status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Booking & Reservation",
+      "item": [
+        {
+          "name": "Get All Bookings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/bookings", "host": ["{{baseUrl}}"], "path": ["api", "bookings"] }
+          }
+        },
+        {
+          "name": "Create Reservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomId\": \"ROOM_ID_HERE\",\n  \"checkInDate\": \"2026-09-10\",\n  \"checkOutDate\": \"2026-09-14\",\n  \"adultGuests\": 2,\n  \"childGuests\": 0,\n  \"specialRequests\": \"High floor and champagne setup\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/bookings", "host": ["{{baseUrl}}"], "path": ["api", "bookings"] }
+          }
+        },
+        {
+          "name": "Check-In Guest & Assign Keycard",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assignedKeyCard\": \"RFID-KEY-882\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/bookings/:bookingId/check-in", "host": ["{{baseUrl}}"], "path": ["api", "bookings", ":bookingId", "check-in"] }
+          }
+        },
+        {
+          "name": "Check-Out Guest (Auto room to Cleaning)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/bookings/:bookingId/check-out", "host": ["{{baseUrl}}"], "path": ["api", "bookings", ":bookingId", "check-out"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Billing & Invoices",
+      "item": [
+        {
+          "name": "Get All Invoices",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/invoices", "host": ["{{baseUrl}}"], "path": ["api", "invoices"] }
+          }
+        },
+        {
+          "name": "Add Extra Service Charge to Bill",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Fine Dining Dinner & Red Wine\",\n  \"category\": \"Restaurant\",\n  \"quantity\": 1,\n  \"unitPrice\": 95.00\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/invoices/:invoiceId/add-charge", "host": ["{{baseUrl}}"], "path": ["api", "invoices", ":invoiceId", "add-charge"] }
+          }
+        },
+        {
+          "name": "Record Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 957.60,\n  \"paymentMethod\": \"CreditCard\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/invoices/:invoiceId/pay", "host": ["{{baseUrl}}"], "path": ["api", "invoices", ":invoiceId", "pay"] }
+          }
+        },
+        {
+          "name": "Printable Invoice HTML",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/invoices/:invoiceId/print", "host": ["{{baseUrl}}"], "path": ["api", "invoices", ":invoiceId", "print"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Housekeeping & Maintenance",
+      "item": [
+        {
+          "name": "Get Housekeeping Tasks",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/housekeeping", "host": ["{{baseUrl}}"], "path": ["api", "housekeeping"] }
+          }
+        },
+        {
+          "name": "Update Housekeeping Status (Completed returns room to Available)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Completed\",\n  \"notes\": \"Sanitization and fresh linen replaced\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/housekeeping/:taskId/status", "host": ["{{baseUrl}}"], "path": ["api", "housekeeping", ":taskId", "status"] }
+          }
+        },
+        {
+          "name": "Get Maintenance Tickets",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/maintenance", "host": ["{{baseUrl}}"], "path": ["api", "maintenance"] }
+          }
+        },
+        {
+          "name": "Report Maintenance Issue",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"102\",\n  \"category\": \"Plumbing\",\n  \"issueTitle\": \"Shower drain slow drainage\",\n  \"issueDescription\": \"Water accumulating in shower basin.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/maintenance", "host": ["{{baseUrl}}"], "path": ["api", "maintenance"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Guest Services & Reviews",
+      "item": [
+        {
+          "name": "Request Guest Service",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serviceType\": \"RoomService Food/Beverage\",\n  \"roomNumber\": \"102\",\n  \"details\": \"Continental Breakfast with fresh orange juice\",\n  \"price\": 35.00,\n  \"chargeToInvoice\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/services", "host": ["{{baseUrl}}"], "path": ["api", "services"] }
+          }
+        },
+        {
+          "name": "Submit Guest Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"overallRating\": 5,\n  \"cleanlinessRating\": 5,\n  \"staffServiceRating\": 5,\n  \"amenitiesRating\": 5,\n  \"comment\": \"Exceptional hospitality and wonderful views!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/feedback", "host": ["{{baseUrl}}"], "path": ["api", "feedback"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Analytics & Reports",
+      "item": [
+        {
+          "name": "Get Executive Overview & KPIs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/reports/overview", "host": ["{{baseUrl}}"], "path": ["api", "reports", "overview"] }
+          }
+        },
+        {
+          "name": "Get Revenue Breakdown",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/reports/revenue", "host": ["{{baseUrl}}"], "path": ["api", "reports", "revenue"] }
+          }
+        }
+      ]
+    }
+  ]
+}
