@@ -439,8 +439,9 @@ body {
 
 .footer {
     position: relative;
-    margin-top: -110px;
-    padding-top: 180px;
+    /* Keep the footer in normal flow so it cannot cover a page's final CTA. */
+    margin-top: 0;
+    padding-top: 70px;
 }
 
 .footer .btn.btn-social {
