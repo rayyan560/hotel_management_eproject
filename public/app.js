@@ -16,11 +16,9 @@ const DEMO_USERS = {
 // Initialize Application
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('[HMS Client] Initializing LuxuryStay Dashboard...');
-  if (currentToken && currentUser) {
-    applyUserSession(currentToken, currentUser);
-  } else {
-    showAuthOverlay();
-  }
+  // Always greet the visitor with the staff sign-in screen. A saved session is
+  // retained after authentication, but never silently opens the portal.
+  showAuthOverlay();
 });
 
 // Show Auth Overlay
