@@ -713,3 +713,70 @@ body {
     transform: translateY(0);
     opacity: 1;
 }
+
+/* Refined luxury UI layer: preserve the original gold/navy palette, add depth and motion. */
+:root {
+    --surface-soft: #f7f9fc;
+    --line: rgba(15, 23, 43, .09);
+    --shadow-soft: 0 14px 40px rgba(15, 23, 43, .08);
+    --shadow-lift: 0 22px 48px rgba(15, 23, 43, .15);
+}
+
+body { background: var(--surface-soft); text-rendering: optimizeLegibility; }
+
+a, button, .btn, .nav-link, .room-item, .service-item, .team-item,
+.testimonial-item, .blog-item, .contact-item {
+    transition: color .25s ease, background-color .25s ease, border-color .25s ease,
+        box-shadow .35s ease, transform .35s cubic-bezier(.16, 1, .3, 1);
+}
+
+a:focus-visible, button:focus-visible, .btn:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 3px solid rgba(254, 161, 22, .45); outline-offset: 3px;
+}
+
+.container-fluid.bg-dark.sticky-top, .container-fluid.bg-dark:has(.navbar) {
+    box-shadow: 0 8px 30px rgba(15, 23, 43, .18); z-index: 1000;
+}
+
+.navbar-dark .navbar-nav .nav-link { position: relative; letter-spacing: .04em; }
+.navbar-dark .navbar-nav .nav-link::after {
+    content: ""; position: absolute; left: 0; right: 30px; bottom: 17px; height: 2px;
+    background: var(--primary); transform: scaleX(0); transform-origin: left; transition: transform .3s ease;
+}
+.navbar-dark .navbar-nav .nav-link:hover::after,
+.navbar-dark .navbar-nav .nav-link.active::after { transform: scaleX(1); }
+
+.page-header { min-height: 310px; display: flex; align-items: stretch; }
+.page-header-inner { display: flex; align-items: center; background: linear-gradient(135deg, rgba(15,23,43,.86), rgba(15,23,43,.56)); }
+.page-header h1, #header-carousel h1 { letter-spacing: -.035em; }
+.section-title { letter-spacing: .12em; font-size: .78rem; }
+.section-title::before, .section-title::after { height: 3px; border-radius: 99px; }
+
+.btn { border-radius: 6px !important; letter-spacing: .06em; box-shadow: 0 8px 18px rgba(254,161,22,.18); }
+.btn:hover { transform: translateY(-3px); box-shadow: 0 14px 26px rgba(254,161,22,.28); }
+
+.room-item, .service-item, .team-item, .testimonial-item, .rounded.shadow, .border.rounded {
+    border: 1px solid var(--line); box-shadow: var(--shadow-soft) !important;
+}
+.room-item:hover, .service-item:hover, .team-item:hover, .rounded.shadow:hover, .border.rounded:hover {
+    transform: translateY(-8px); box-shadow: var(--shadow-lift) !important;
+}
+.room-item img, .team-item img, .rounded.shadow img { transition: transform .7s cubic-bezier(.16,1,.3,1), filter .35s ease; }
+.room-item:hover img, .team-item:hover img, .rounded.shadow:hover img { transform: scale(1.05); filter: saturate(1.08); }
+
+.booking { filter: drop-shadow(0 18px 28px rgba(15,23,43,.12)); }
+.booking form, .newsletter .bg-white { border: 1px solid var(--line); border-radius: 10px; }
+.form-control, .form-select { border-color: var(--line); border-radius: 6px; min-height: 46px; }
+.form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 .2rem rgba(254,161,22,.16); }
+.footer { background: linear-gradient(145deg, #0f172b, #18243f) !important; }
+
+@media (max-width: 991.98px) {
+    .navbar-dark .navbar-nav .nav-link::after { right: 0; bottom: 5px; }
+    .navbar-dark .navbar-nav .nav-link { padding: 12px 0; }
+    .page-header { min-height: 250px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}

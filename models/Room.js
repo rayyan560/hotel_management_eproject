@@ -16,7 +16,7 @@ const roomSchema = new mongoose.Schema(
     roomType: {
       type: String,
       required: [true, 'Please specify the room type'],
-      enum: ['Single', 'Double', 'Deluxe', 'Luxury Suite', 'Presidential Suite'],
+      trim: true,
     },
     pricePerNight: {
       type: Number,
@@ -31,8 +31,8 @@ const roomSchema = new mongoose.Schema(
     },
     bedType: {
       type: String,
-      enum: ['King Size', 'Queen Size', 'Twin Beds', 'Double-Double'],
       default: 'King Size',
+      trim: true,
     },
     status: {
       type: String,
